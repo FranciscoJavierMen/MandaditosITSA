@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.exemple.administrador.mandaditostec.mandadero.DetallesPedido">
+    tools:context="com.exemple.administrador.mandaditostec.mandadero.DetallesPedidoMandadero">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/DetallesDelPedido"
+                android:text="@string/detallesPedidpLabel"
                 android:textSize="23sp"
                 android:textColor="#6480C4"
                 android:textAlignment="center"/>
@@ -30,7 +30,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_detalles_pedido" />
+    <include layout="@layout/content_detalles_pedido_mandadero" />
 
     <LinearLayout
         android:layout_width="wrap_content"

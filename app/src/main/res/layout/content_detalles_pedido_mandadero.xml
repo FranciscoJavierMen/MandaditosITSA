@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<<<<<<< HEAD
+
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.exemple.administrador.mandaditostec.mandadero.DetallesPedido"
-    tools:showIn="@layout/detalles_pedido">
+    tools:context="com.exemple.administrador.mandaditostec.mandadero.DetallesPedidoMandadero"
+    tools:showIn="@layout/detalles_pedido_mandadero">
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_gravity="center_vertical"
@@ -33,7 +33,7 @@
 
                 <TextView
                     style="@style/label"
-                    android:text="@string/descripcion"
+                    android:text="@string/descripcionPedido"
                     app:layout_anchor="@+id/view1"
                     app:layout_anchorGravity="center" />
 
@@ -377,21 +377,9 @@
 
                 </android.support.design.widget.CoordinatorLayout>
 
-
-
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
-
-
-
-
     </android.support.design.widget.CoordinatorLayout>
 </android.support.v4.widget.NestedScrollView>
-=======
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-</android.support.constraint.ConstraintLayout>
->>>>>>> 434a01567a1e54a9c8f1a8ee5d13c784925146bd

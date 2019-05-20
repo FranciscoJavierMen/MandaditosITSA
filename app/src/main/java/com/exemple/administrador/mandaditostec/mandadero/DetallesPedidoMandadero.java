@@ -9,8 +9,7 @@ import android.view.View;
 
 import com.example.administrador.mandaditostec.R;
 
-public class DetallesPedido extends AppCompatActivity {
-
+public class DetallesPedidoMandadero extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,5 +26,4 @@ public class DetallesPedido extends AppCompatActivity {
             }
         });
     }
-
 }
