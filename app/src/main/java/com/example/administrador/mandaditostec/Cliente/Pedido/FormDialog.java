@@ -3,6 +3,8 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -24,9 +26,12 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -114,12 +119,43 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
         startActivityForResult(destino, MAP_POINT2);
     }
 
+    //Obtiene la dirección origen de las coordenadas dadas
+    private void setDireccionOrigen(double latitud, double longitud) throws IOException {
+        Geocoder geoCoder = new Geocoder(getActivity(), Locale.getDefault());
+
+        List<Address> matches = geoCoder.getFromLocation(latitud, longitud, 1);
+
+        Address bestMatch = (matches.isEmpty() ? null : matches.get(0));
+        assert bestMatch != null;
+        String addressText = String.format("%s, %s, %s", bestMatch.getMaxAddressLineIndex() > 0 ? bestMatch.getAddressLine(0) : "Desconocido",
+                bestMatch.getLocality(), bestMatch.getCountryName());
+
+        //Estableciendo el nombre en el text
+        txtDireccionOrigen.setText(addressText);
+    }
+
+    //Obtiene la dirección origen de las coordenadas dadas
+    private void setDireccionDestino(double latitud, double longitud) throws IOException {
+        Geocoder geoCoder = new Geocoder(getActivity(), Locale.getDefault());
+
+        List<Address> matches = geoCoder.getFromLocation(latitud, longitud, 1);
+
+        Address bestMatch = (matches.isEmpty() ? null : matches.get(0));
+        assert bestMatch != null;
+        String addressText = String.format("%s, %s, %s", bestMatch.getMaxAddressLineIndex() > 0 ? bestMatch.getAddressLine(0) : "Desconocido",
+                bestMatch.getLocality(), bestMatch.getCountryName());
+
+        //Estableciendo el nombre en el text
+        txtDireccionDestino.setText(addressText);
+    }
+
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == MAP_POINT1){
             try{
                 LatLng latLng = data.getParcelableExtra("punto_seleccionado");
-                txtDireccionOrigen.setText(""+latLng);
+                setDireccionOrigen(latLng.latitude, latLng.longitude);
                 Toast.makeText(getActivity().getApplicationContext(), "Punto seleccionado: "+latLng.latitude+" - "+latLng.longitude, Toast.LENGTH_SHORT).show();
             } catch (Exception e){
                 e.printStackTrace();
@@ -128,7 +164,7 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
         if (requestCode == MAP_POINT2){
             try{
                 LatLng latLng = data.getParcelableExtra("punto_seleccionado");
-                txtDireccionDestino.setText(""+latLng);
+                setDireccionDestino(latLng.latitude, latLng.longitude);
                 Toast.makeText(getActivity().getApplicationContext(), "Punto seleccionado: "+latLng.latitude+" - "+latLng.longitude, Toast.LENGTH_SHORT).show();
             } catch (Exception e){
                 e.printStackTrace();

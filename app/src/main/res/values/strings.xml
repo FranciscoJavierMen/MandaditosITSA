@@ -70,4 +70,5 @@
     <string name="chat">Chat</string>
     <string name="nuevo_chat">Comenzar un nuevo chat</string>
     <string name="pedido_aceptado">Aceptado y en camino</string>
+    <string name="cerca_de">Ubicación seleccionada cerca de:</string>
 </resources>

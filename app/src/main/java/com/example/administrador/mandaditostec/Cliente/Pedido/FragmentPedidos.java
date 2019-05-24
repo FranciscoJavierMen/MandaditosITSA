@@ -55,7 +55,6 @@ public class FragmentPedidos extends Fragment {
     private CoordinatorLayout coordinatorLayout;
 
     //Firebase
-    private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
 
     // TODO: Rename and change types of parameters
@@ -107,6 +106,11 @@ public class FragmentPedidos extends Fragment {
                 try {
                     Thread.sleep(1000);
                     refreshPedidos.setRefreshing(false);
+                    Snackbar snackbar = Snackbar
+                            .make(coordinatorLayout, "Lista de pedidos actualizada", Snackbar.LENGTH_LONG);
+
+                    snackbar.setActionTextColor(Color.YELLOW);
+                    snackbar.show();
                     onStart();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -141,6 +145,8 @@ public class FragmentPedidos extends Fragment {
             protected void onBindViewHolder(final PedidosViewHolder holder, int position, ModeloPedidos model) {
                 final String pedidoID = getRef(position).getKey();
 
+
+                assert pedidoID != null;
                 databaseReference.child(pedidoID).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -153,7 +159,7 @@ public class FragmentPedidos extends Fragment {
                             holder.txtDireccionDestino.setText(direccionD);
                             holder.txtPedido.setText(pedido);
                             holder.txtHora.setText(fecha);
-                            
+
                             holder.itemView.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -187,7 +193,7 @@ public class FragmentPedidos extends Fragment {
 
         private TextView txtDireccionDestino, txtPedido, txtHora;
 
-        public PedidosViewHolder(View itemView) {
+        PedidosViewHolder(View itemView) {
             super(itemView);
 
             txtDireccionDestino = itemView.findViewById(R.id.txtDireccionPedido);
@@ -236,40 +242,5 @@ public class FragmentPedidos extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    private class HackingBackgroundTask extends AsyncTask<Void, Void, ArrayList<ModeloPedidos>> {
-
-        static final int DURACION = 2 * 1000;
-
-        @Override
-        protected ArrayList doInBackground(Void... params) {
-            // Simulación de la carga de items
-            try {
-                Thread.sleep(DURACION);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            // Retornar en nuevos elementos para el adaptador
-            return listaPedidos;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList result) {
-            super.onPostExecute(result);
-
-            // Limpiar elementos antiguos
-            adaptadorPedidos.clear();
-
-            Snackbar snackbar = Snackbar
-                    .make(coordinatorLayout, "Lista de pedidos actualizada", Snackbar.LENGTH_LONG);
-
-            snackbar.setActionTextColor(Color.YELLOW);
-            snackbar.show();
-
-            // Parar la animación del indicador
-            refreshPedidos.setRefreshing(false);
-        }
-
-    }
 
 }
