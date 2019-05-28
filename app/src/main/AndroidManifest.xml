@@ -17,17 +17,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.exemple.administrador.mandaditostec.mandadero.DetallesPedidoMandadero"
-            android:label="@string/title_activity_detalles_pedido"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity
-            android:name=".Cliente.BottomNavigation"
-            android:label="@string/app_name">
+            android:name="com.exemple.administrador.mandaditostec.mandadero.PedidoMandadero.Bottom_navigation_mandadero"
+            android:label="@string/title_activity_bottom_navigation_mandadero">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+        </activity>
+        <activity
+            android:name="com.exemple.administrador.mandaditostec.mandadero.DetallesPedidoMandadero"
+            android:label="@string/title_activity_detalles_pedido"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Cliente.BottomNavigation"
+            android:label="@string/app_name">
+
+
         </activity>
 
         <meta-data
