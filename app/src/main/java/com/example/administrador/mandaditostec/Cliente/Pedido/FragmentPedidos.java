@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -35,7 +38,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class FragmentPedidos extends Fragment {
@@ -49,8 +55,6 @@ public class FragmentPedidos extends Fragment {
 
     //Lista y modelo
     private RecyclerView recyclerPedidos;
-    private AdaptadorPedidos adaptadorPedidos;
-    private ArrayList<ModeloPedidos> listaPedidos = new ArrayList<>();
     private SwipeRefreshLayout refreshPedidos;
     private CoordinatorLayout coordinatorLayout;
 
@@ -145,16 +149,21 @@ public class FragmentPedidos extends Fragment {
             protected void onBindViewHolder(final PedidosViewHolder holder, int position, ModeloPedidos model) {
                 final String pedidoID = getRef(position).getKey();
 
-
                 assert pedidoID != null;
                 databaseReference.child(pedidoID).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()){
-
+                            final String id = dataSnapshot.child("id").getValue().toString();
                             final String direccionD = dataSnapshot.child("mandadero").getValue().toString();
                             final String pedido = dataSnapshot.child("pedido").getValue().toString();
                             final String fecha = dataSnapshot.child("hora").getValue().toString();
+                            final String mandadero = dataSnapshot.child("mandadero").getValue().toString();
+                            final boolean realizado = (boolean)dataSnapshot.child("realizado").getValue();
+                            final String lat = dataSnapshot.child("latitudDestino").getValue().toString();
+                            final String  lon = dataSnapshot.child("longitudDestino").getValue().toString();
+                            final double latDes = Double.valueOf(lat);
+                            final double lonDes = Double.valueOf(lon);
 
                             holder.txtDireccionDestino.setText(direccionD);
                             holder.txtPedido.setText(pedido);
@@ -163,7 +172,19 @@ public class FragmentPedidos extends Fragment {
                             holder.itemView.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    DetallesPedido.display(getFragmentManager());
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("id", id);
+                                    bundle.putString("pedido", pedido);
+                                    bundle.putString("fecha", fecha);
+                                    bundle.putString("mandadero", mandadero);
+                                    bundle.putBoolean("realizado", realizado);
+                                    bundle.putString("direccion", setDireccion(latDes, lonDes));
+                                    bundle.putDouble("longitud", lonDes);
+                                    bundle.putDouble("latitud", latDes);
+
+                                    DetallesPedido detallesPedido = new DetallesPedido();
+                                    setFragment(detallesPedido, bundle);
+                                    //DetallesPedido.display(getFragmentManager());
                                 }
                             });
                         } else {
@@ -200,6 +221,40 @@ public class FragmentPedidos extends Fragment {
             txtPedido = itemView.findViewById(R.id.txtDescripcionPedido);
             txtHora = itemView.findViewById(R.id.txtHoraPedido);
         }
+    }
+
+
+    //Método para establecer el fragment seleccionado dentro del FrameLayout
+    private void setFragment(Fragment fragment, Bundle bundle){
+        fragment.setArguments(bundle);
+
+        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.container, fragment);
+        fragmentTransaction.commit();
+
+    }
+
+    //Obtiene la dirección origen de las coordenadas dadas
+    private String setDireccion(double lat, double lon){
+        String cityName = "";
+        String addresName = "";
+        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+        List<Address> addresses;
+        try{
+            addresses = geocoder.getFromLocation(lat, lon, 10);
+            if (addresses.size() > 0){
+                for (Address adr: addresses){
+                    if (adr.getLocality() != null && adr.getLocality().length() > 0){
+                        cityName = adr.getLocality();
+                        addresName = adr.getAddressLine(0);
+                        break;
+                    }
+                }
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return addresName + " - " + cityName;
     }
 
     private void inicializarComponentes(View view) {

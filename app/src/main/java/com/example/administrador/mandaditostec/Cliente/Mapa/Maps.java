@@ -173,8 +173,8 @@ public class Maps extends FragmentActivity implements
                                     });
 
                                     try {
-                                        setDireccion(point.latitude, point.longitude);
-                                    } catch (IOException e) {
+                                        hereLocation(point.latitude, point.longitude);
+                                    } catch (Exception e) {
                                         e.printStackTrace();
                                     }
                                 }
@@ -192,19 +192,27 @@ public class Maps extends FragmentActivity implements
         }
     }
 
-    //Obtiene la dirección de las coordenadas dadas
-    private void setDireccion(double latitud, double longitud) throws IOException {
-        Geocoder geoCoder = new Geocoder(this, Locale.getDefault());
-
-        List <Address> matches = geoCoder.getFromLocation(latitud, longitud, 1);
-
-        Address bestMatch = (matches.isEmpty() ? null : matches.get(0));
-        assert bestMatch != null;
-        String addressText = String.format("%s, %s, %s", bestMatch.getMaxAddressLineIndex() > 0 ? bestMatch.getAddressLine(0) : "Desconocido",
-                bestMatch.getLocality(), bestMatch.getCountryName());
-
-        //Estableciendo el nombre en el text
-        txtDireccion.setText(addressText);
+    //Método alternativo para obrener nombre de la localidad
+    private void hereLocation(double lat, double lon){
+        String cityName = "";
+        String addresName = "";
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        List<Address> addresses;
+        try{
+            addresses = geocoder.getFromLocation(lat, lon, 10);
+            if (addresses.size() > 0){
+                for (Address adr: addresses){
+                    if (adr.getLocality() != null && adr.getLocality().length() > 0){
+                        cityName = adr.getLocality();
+                        addresName = adr.getAddressLine(0);
+                        txtDireccion.setText(addresName+""+cityName);
+                        break;
+                    }
+                }
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     //Mueve la cámara al punto ubicado
@@ -290,8 +298,8 @@ public class Maps extends FragmentActivity implements
                         });
 
                         try {
-                            setDireccion(point.latitude, point.longitude);
-                        } catch (IOException e) {
+                            hereLocation(point.latitude, point.longitude);
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }

@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -42,6 +43,7 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
     private final static int MAP_POINT1 = 999;
     private final static int MAP_POINT2 = 998;
     private Toolbar toolbar;
+    private String latO, lonO, latD, lonD;
     
     private FloatingActionButton fabEnviarPedido;
     private AppCompatButton btnMandadero, btnDireccionOrigen, btnDireccionDestino;
@@ -120,35 +122,50 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
     }
 
     //Obtiene la dirección origen de las coordenadas dadas
-    private void setDireccionOrigen(double latitud, double longitud) throws IOException {
-        Geocoder geoCoder = new Geocoder(getActivity(), Locale.getDefault());
-
-        List<Address> matches = geoCoder.getFromLocation(latitud, longitud, 1);
-
-        Address bestMatch = (matches.isEmpty() ? null : matches.get(0));
-        assert bestMatch != null;
-        String addressText = String.format("%s, %s, %s", bestMatch.getMaxAddressLineIndex() > 0 ? bestMatch.getAddressLine(0) : "Desconocido",
-                bestMatch.getLocality(), bestMatch.getCountryName());
-
-        //Estableciendo el nombre en el text
-        txtDireccionOrigen.setText(addressText);
+    private void setDireccionOrigen(double lat, double lon) {
+        String cityName = "";
+        String addresName = "";
+        Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+        List<Address> addresses;
+        try{
+            addresses = geocoder.getFromLocation(lat, lon, 10);
+            if (addresses.size() > 0){
+                for (Address adr: addresses){
+                    if (adr.getLocality() != null && adr.getLocality().length() > 0){
+                        cityName = adr.getLocality();
+                        addresName = adr.getAddressLine(0);
+                        txtDireccionOrigen.setText(addresName+""+cityName);
+                        break;
+                    }
+                }
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     //Obtiene la dirección origen de las coordenadas dadas
-    private void setDireccionDestino(double latitud, double longitud) throws IOException {
-        Geocoder geoCoder = new Geocoder(getActivity(), Locale.getDefault());
-
-        List<Address> matches = geoCoder.getFromLocation(latitud, longitud, 1);
-
-        Address bestMatch = (matches.isEmpty() ? null : matches.get(0));
-        assert bestMatch != null;
-        String addressText = String.format("%s, %s, %s", bestMatch.getMaxAddressLineIndex() > 0 ? bestMatch.getAddressLine(0) : "Desconocido",
-                bestMatch.getLocality(), bestMatch.getCountryName());
-
-        //Estableciendo el nombre en el text
-        txtDireccionDestino.setText(addressText);
+    private void setDireccionDestino(double lat, double lon){
+        String cityName = "";
+        String addresName = "";
+        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+        List<Address> addresses;
+        try{
+            addresses = geocoder.getFromLocation(lat, lon, 10);
+            if (addresses.size() > 0){
+                for (Address adr: addresses){
+                    if (adr.getLocality() != null && adr.getLocality().length() > 0){
+                        cityName = adr.getLocality();
+                        addresName = adr.getAddressLine(0);
+                        txtDireccionDestino.setText(addresName+""+cityName);
+                        break;
+                    }
+                }
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -156,7 +173,8 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
             try{
                 LatLng latLng = data.getParcelableExtra("punto_seleccionado");
                 setDireccionOrigen(latLng.latitude, latLng.longitude);
-                Toast.makeText(getActivity().getApplicationContext(), "Punto seleccionado: "+latLng.latitude+" - "+latLng.longitude, Toast.LENGTH_SHORT).show();
+                latO = String.valueOf(latLng.latitude);
+                lonO = String.valueOf(latLng.longitude);
             } catch (Exception e){
                 e.printStackTrace();
             }
@@ -165,7 +183,8 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
             try{
                 LatLng latLng = data.getParcelableExtra("punto_seleccionado");
                 setDireccionDestino(latLng.latitude, latLng.longitude);
-                Toast.makeText(getActivity().getApplicationContext(), "Punto seleccionado: "+latLng.latitude+" - "+latLng.longitude, Toast.LENGTH_SHORT).show();
+                latD = String.valueOf(latLng.latitude);
+                lonD = String.valueOf(latLng.longitude);
             } catch (Exception e){
                 e.printStackTrace();
             }
@@ -212,27 +231,32 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
         }
     }
 
+    //Obtiene la fecha y hora acual
+    private String getdateTime(){
+        Calendar calendar = Calendar.getInstance();
+        String currentDate = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+        String currentHour = format.format(calendar.getTime());
+        return currentDate +" - "+ currentHour;
+    }
+
     private void enviarPedido() {
-
-
         if(validarPedido()){
-            String pedido, mandadero, direccionOrigen, direccionDestino, fecha;
-            SimpleDateFormat sf = new SimpleDateFormat("yyyy/MM/dd G 'at' HH:mm:ss");
-            fecha = sf.format(new Date());
+            String pedido, mandadero;
 
             pedido = edtDescripcionPedido.getText().toString();
             mandadero = txtMandadero.getText().toString();
-            direccionOrigen = txtDireccionOrigen.getText().toString();
-            direccionDestino = txtDireccionDestino.getText().toString();
 
             ModeloPedidos modelo = new ModeloPedidos();
 
             modelo.setId(UUID.randomUUID().toString());
             modelo.setMandadero(mandadero);
-            modelo.setDireccionOrigen(direccionOrigen);
-            modelo.setDireccionDestino(direccionDestino);
+            modelo.setLatitudOrigen(latO);
+            modelo.setLongitudOrigen(lonO);
+            modelo.setLatitudDestino(latD);
+            modelo.setLongitudDestino(lonD);
             modelo.setPedido(pedido);
-            modelo.setHora(fecha);
+            modelo.setHora(getdateTime());
             modelo.setRealizado(false);
 
             databaseReference.child("Pedido").child(modelo.getId()).setValue(modelo);

@@ -71,4 +71,7 @@
     <string name="nuevo_chat">Comenzar un nuevo chat</string>
     <string name="pedido_aceptado">Aceptado y en camino</string>
     <string name="cerca_de">Ubicación seleccionada cerca de:</string>
+    <string name="confirmar_recepcion_pedido">Estas seguro que deseas confirmar la recepción de tu pedido? Si lo haces estás aceptando que el madadero ha entregado correctamente tu pedido al domicilo que especificaste, después de esto el mandadero se desblinda de cualquier responsabilidad sobre el pedido.</string>
+    <string name="title_activity_mapa_destino">Map</string>
+    <string name="notaMapa2">La dirección que se muestra en el marcador es la ubicación seleccionada como destino de entrega del pedido, el mandadero deberá entregar el pedido en esta dirección.</string>
 </resources>

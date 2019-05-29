@@ -2,22 +2,31 @@ package com.example.administrador.mandaditostec.Cliente.Pedido;
 
 public class ModeloPedidos {
     private String id;
-    private String direccionOrigen;
-    private String direccionDestino;
+    private String latitudOrigen;
+    private String longitudOrigen;
+    private String latitudDestino;
+    private String longitudDestino;
     private String pedido;
     private String hora;
+    private String idMandadero;
     private String mandadero;
     private Boolean realizado;
+    private String estado;
 
-    public ModeloPedidos(String id, String direccionOrigen, String direccionDestino, String pedido,
-                         String hora, String mandadero, Boolean realizado) {
+    public ModeloPedidos(String id, String latitudOrigen, String longitudOrigen,
+                         String latitudDestino, String longitudDestino, String pedido,
+                         String hora, String idMandadero, String mandadero, Boolean realizado, String estado) {
         this.id = id;
-        this.direccionOrigen = direccionOrigen;
-        this.direccionDestino = direccionDestino;
+        this.latitudOrigen = latitudOrigen;
+        this.longitudOrigen = longitudOrigen;
+        this.latitudDestino = latitudDestino;
+        this.longitudDestino = longitudDestino;
         this.pedido = pedido;
         this.hora = hora;
+        this.idMandadero = idMandadero;
         this.mandadero = mandadero;
         this.realizado = realizado;
+        this.estado = estado;
     }
 
     ModeloPedidos(){}
@@ -30,20 +39,36 @@ public class ModeloPedidos {
         this.id = id;
     }
 
-    public String getDireccionOrigen() {
-        return direccionOrigen;
+    public String getLatitudOrigen() {
+        return latitudOrigen;
     }
 
-    public void setDireccionOrigen(String direccionOrigen) {
-        this.direccionOrigen = direccionOrigen;
+    public void setLatitudOrigen(String latitudOrigen) {
+        this.latitudOrigen = latitudOrigen;
     }
 
-    public String getDireccionDestino() {
-        return direccionDestino;
+    public String getLongitudOrigen() {
+        return longitudOrigen;
     }
 
-    public void setDireccionDestino(String direccionDestino) {
-        this.direccionDestino = direccionDestino;
+    public void setLongitudOrigen(String longitudOrigen) {
+        this.longitudOrigen = longitudOrigen;
+    }
+
+    public String getLatitudDestino() {
+        return latitudDestino;
+    }
+
+    public void setLatitudDestino(String latitudDestino) {
+        this.latitudDestino = latitudDestino;
+    }
+
+    public String getLongitudDestino() {
+        return longitudDestino;
+    }
+
+    public void setLongitudDestino(String longitudDestino) {
+        this.longitudDestino = longitudDestino;
     }
 
     public String getPedido() {
@@ -62,6 +87,14 @@ public class ModeloPedidos {
         this.hora = hora;
     }
 
+    public String getIdMandadero() {
+        return idMandadero;
+    }
+
+    public void setIdMandadero(String idMandadero) {
+        this.idMandadero = idMandadero;
+    }
+
     public String getMandadero() {
         return mandadero;
     }
@@ -76,5 +109,13 @@ public class ModeloPedidos {
 
     public void setRealizado(Boolean realizado) {
         this.realizado = realizado;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 }
