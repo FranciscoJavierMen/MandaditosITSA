@@ -84,6 +84,7 @@
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/imgItemPedido"
                 android:layout_width="14dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center"

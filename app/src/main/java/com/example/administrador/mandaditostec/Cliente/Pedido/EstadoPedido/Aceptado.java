@@ -78,8 +78,11 @@ public class Aceptado extends Fragment {
             }
         });
 
-        recyclerPedidos.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setStackFromEnd(true);
 
+        recyclerPedidos.setLayoutManager(mLayoutManager);
         return view;
     }
 
@@ -133,6 +136,7 @@ public class Aceptado extends Fragment {
             holder.txtDireccionDestino.setText(modelo.getMandadero());
             holder.txtPedido.setText(modelo.getPedido());
             holder.txtHora.setText(modelo.getHora());
+            holder.image.setImageResource(R.drawable.img_aceptado);
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -174,6 +178,7 @@ public class Aceptado extends Fragment {
         public class RecViewHolder extends RecyclerView.ViewHolder {
 
             private TextView txtDireccionDestino, txtPedido, txtHora;
+            private ImageView image;
 
             public RecViewHolder(View itemView) {
                 super(itemView);
@@ -181,6 +186,7 @@ public class Aceptado extends Fragment {
                 txtDireccionDestino = itemView.findViewById(R.id.txtDireccionPedido);
                 txtPedido = itemView.findViewById(R.id.txtDescripcionPedido);
                 txtHora = itemView.findViewById(R.id.txtHoraPedido);
+                image = itemView.findViewById(R.id.imgPedido);
             }
         }
     }

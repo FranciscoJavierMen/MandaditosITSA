@@ -243,10 +243,12 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
 
             pedido = edtDescripcionPedido.getText().toString();
             mandadero = txtMandadero.getText().toString();
+            Long tsLong = System.currentTimeMillis()/1000;
+            String timestamps = tsLong.toString();
 
             ModeloPedidos modelo = new ModeloPedidos();
 
-            modelo.setId(UUID.randomUUID().toString());
+            modelo.setId(timestamps);
             modelo.setMandadero(mandadero);
             modelo.setLatitudOrigen(latO);
             modelo.setLongitudOrigen(lonO);
