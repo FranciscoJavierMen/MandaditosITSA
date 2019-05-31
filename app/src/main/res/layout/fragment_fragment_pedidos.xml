@@ -9,32 +9,103 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Cliente.Pedido.FragmentPedidos">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/refreshPedidos"
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.v7.widget.RecyclerView
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:id="@+id/recyclerPedidos"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        </android.support.v7.widget.RecyclerView>
+            <android.support.v7.widget.CardView
+                android:layout_marginBottom="15dp"
+                app:cardElevation="6dp"
+                app:cardCornerRadius="8dp"
+                android:id="@+id/cardPedidos"
+                app:cardBackgroundColor="@color/azulClaro"
+                style="@style/cardPedidos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="vertical">
 
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/pedidos" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabPedido"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:focusable="true"
-        app:rippleColor="@color/grisClaro"
-        android:backgroundTint="@color/verde"
-        android:tint="@android:color/white"
-        app:srcCompat="@drawable/ic_add_black_24dp" />
+                    <TextView
+                        style="@style/textoTituloPedido"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textColor="@color/azulObscuro"
+                        android:text="Ver tus listas de pedidos"/>
+
+                    <TextView
+                        android:layout_margin="10dp"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/acceder_lista_pedidos"/>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_marginBottom="15dp"
+                app:cardElevation="6dp"
+                app:cardCornerRadius="8dp"
+                android:id="@+id/card2"
+                app:cardBackgroundColor="@color/azulObscuro"
+                style="@style/cardPedidos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/conversacion" />
+
+                    <TextView
+                        style="@style/textoTituloPedido"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textColor="@color/azulClaro"
+                        android:text="¿Que puedes hacer con esta app?"/>
+
+                    <TextView
+                        android:layout_margin="10dp"
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/descubre"/>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

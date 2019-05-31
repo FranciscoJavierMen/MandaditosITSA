@@ -1,8 +1,6 @@
 package com.example.administrador.mandaditostec.Cliente.Pedido;
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -10,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -257,7 +254,7 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
             modelo.setLongitudDestino(lonD);
             modelo.setPedido(pedido);
             modelo.setHora(getdateTime());
-            modelo.setRealizado(false);
+            modelo.setEstado("pendiente");
 
             databaseReference.child("Pedido").child(modelo.getId()).setValue(modelo);
 

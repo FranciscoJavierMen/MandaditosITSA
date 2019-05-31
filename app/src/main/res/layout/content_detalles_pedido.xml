@@ -40,6 +40,7 @@
                         app:layout_anchorGravity="center" />
 
                     <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/fabRecepcion"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:focusable="true"
@@ -133,6 +134,8 @@
                         android:textStyle="normal"
                         android:textAlignment="textStart"
                         android:textColor="@color/negro"
+                        android:lineSpacingExtra="1dp"
+                        android:textSize="16sp"
                         android:text="@string/large_text"/>
 
                 </LinearLayout>

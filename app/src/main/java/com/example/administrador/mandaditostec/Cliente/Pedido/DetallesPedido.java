@@ -12,6 +12,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -20,91 +21,82 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.administrador.mandaditostec.Cliente.Pedido.EstadoPedido.Pendiente;
 import com.example.administrador.mandaditostec.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import static com.example.administrador.mandaditostec.Cliente.Pedido.FormDialog.TAG;
 
-public class DetallesPedido extends DialogFragment implements View.OnClickListener{
+public class DetallesPedido extends AppCompatActivity implements View.OnClickListener{
 
     public static final String TAG = "Detalles del pedido";
     private Toolbar toolbar;
 
     //Declaración de las vistas
     private TextView txtPedido, txtDireccion, txtFecha, txtMandadero, txtEstado;
-    private FloatingActionButton fabEstado, fabMapa;
+    private FloatingActionButton fabEstado, fabMapa, fabRecepcion;
     private AppCompatButton btnConfirmar;
 
     //Firebase
     private DatabaseReference databaseReference;
 
     //Variables para recepción de datos
-    private String id, pedido, fecha, mandadero, direccion;
-    private boolean realizado;
+    private String id, pedido, fecha, mandadero, direccion, estado;
     private double lat, lon;
 
-    public static DetallesPedido display(FragmentManager fragmentManager) {
-        DetallesPedido detallesPedido = new DetallesPedido();
-        detallesPedido.show(fragmentManager, TAG);
-        return detallesPedido;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null){
-            id = getArguments().getString("id", "No se pudo obtener el id");
-            pedido = getArguments().getString("pedido", "No se pudo cargar el pedido");
-            fecha = getArguments().getString("fecha", "No se pudo obtener la fecha");
-            mandadero = getArguments().getString("mandadero", "No se pudo obtener el mandadero");
-            realizado = getArguments().getBoolean("realizado", false);
-            direccion = getArguments().getString("direccion", "No se pudo obtener la dirección");
-            lat = getArguments().getDouble("latitud");
-            lon = getArguments().getDouble("longitud");
-        }
-        setStyle(FormDialog.STYLE_NORMAL, R.style.AppTheme_FullScreenDialog);
-    }
+        setContentView(R.layout.fragment_detalles_pedido);
+        toolbar = findViewById(R.id.toolbarDetallesPedido);
+        toolbar.setTitle(TAG);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        setSupportActionBar(toolbar);
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        Dialog dialog = getDialog();
-        if (dialog != null) {
-            int width = ViewGroup.LayoutParams.MATCH_PARENT;
-            int height = ViewGroup.LayoutParams.MATCH_PARENT;
-            dialog.getWindow().setLayout(width, height);
-            dialog.getWindow().setWindowAnimations(R.style.AppTheme_Slide);
-        }
-    }
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_detalles_pedido, container, false);
-        inicializar(view);
+        try{
+            Intent i = getIntent();
+            id = i.getStringExtra("id");
+            pedido = i.getStringExtra("pedido");
+            fecha = i.getStringExtra("fecha");
+            mandadero = i.getStringExtra("mandadero");
+            direccion = i.getStringExtra("direccion");
+            estado = i.getStringExtra("estado");
+            lat = i.getDoubleExtra("latitud", 1);
+            lon = i.getDoubleExtra("longitud", 1);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        inicializar();
         setValues();
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Pedido");
 
         btnConfirmar.setOnClickListener(this);
         fabMapa.setOnClickListener(this);
-
-        toolbar = view.findViewById(R.id.toolbarDetallesPedido);
-        return view;
     }
 
     //Inicializar lo componentes gráficos
-    private void inicializar(View v){
-        txtPedido = v.findViewById(R.id.textPedido);
-        txtDireccion = v.findViewById(R.id.textDireccion);
-        txtFecha = v.findViewById(R.id.textFecha);
-        txtMandadero = v.findViewById(R.id.textMandadero);
-        txtEstado = v.findViewById(R.id.textEstado);
-        fabEstado = v.findViewById(R.id.fabEstado);
-        fabMapa = v.findViewById(R.id.fabMapaDestino);
-        btnConfirmar = v.findViewById(R.id.btnConfirmarRecepcion);
+    private void inicializar(){
+        txtPedido = findViewById(R.id.textPedido);
+        txtDireccion = findViewById(R.id.textDireccion);
+        txtFecha = findViewById(R.id.textFecha);
+        txtMandadero = findViewById(R.id.textMandadero);
+        txtEstado = findViewById(R.id.textEstado);
+        fabEstado = findViewById(R.id.fabEstado);
+        fabMapa = findViewById(R.id.fabMapaDestino);
+        fabRecepcion = findViewById(R.id.fabRecepcion);
+        btnConfirmar = findViewById(R.id.btnConfirmarRecepcion);
     }
 
     //establecer los valores
@@ -113,23 +105,38 @@ public class DetallesPedido extends DialogFragment implements View.OnClickListen
         txtFecha.setText(fecha);
         txtMandadero.setText(mandadero);
         txtDireccion.setText(direccion);
-        if (realizado){
-            txtEstado.setText("El pedido ya ha sido entregado");
-            fabEstado.setImageResource(R.drawable.ic_done);
-            fabEstado.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.verde)));
-            btnConfirmar.setText("Pedido recibido");
-            btnConfirmar.setEnabled(false);
-            btnConfirmar.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_boton_recibido));
-        } else {
-            txtEstado.setText("El pedido está en camino");
-            fabEstado.setImageResource(R.drawable.ic_motorcycle);
-            fabEstado.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.azul)));
+
+        switch (estado){
+            case "pendiente":
+                txtEstado.setText("El pedido está en camino");
+                fabEstado.setImageResource(R.drawable.ic_motorcycle);
+                fabEstado.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.azul)));
+                break;
+            case "realizado":
+                txtEstado.setText("El pedido ya ha sido entregado");
+                fabEstado.setImageResource(R.drawable.ic_done);
+                fabEstado.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.verde)));
+                btnConfirmar.setText("Pedido recibido");
+                btnConfirmar.setEnabled(false);
+                btnConfirmar.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_boton_recibido));
+                break;
+            case "rechazado":
+                txtEstado.setText("El pedido ha sido rechazado por el mandadero");
+                fabEstado.setImageResource(R.drawable.ic_close_black_24dp);
+                fabEstado.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.escarlata)));
+                fabRecepcion.setImageResource(R.drawable.ic_cancel);
+                fabRecepcion.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.naranja)));
+                btnConfirmar.setText("Pedido rechazado");
+                btnConfirmar.setEnabled(false);
+                btnConfirmar.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_boton_rechazado));
+                break;
         }
     }
 
+    //Muestra mensaje de confirmación de recepción
     protected void showDialog(){
 
-        final Dialog dialog = new Dialog(getActivity());
+        final Dialog dialog = new Dialog(this);
         dialog.setCancelable(true);
 
         View view  = this.getLayoutInflater().inflate(R.layout.dialogo_confirmacion_recepcion, null);
@@ -141,8 +148,8 @@ public class DetallesPedido extends DialogFragment implements View.OnClickListen
         btnAceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                databaseReference.child(id).child("realizado").setValue(true);
-                Toast.makeText(getActivity(), "Se ha confirmado la recepción del pedido", Toast.LENGTH_SHORT).show();
+                databaseReference.child(id).child("estado").setValue("realizado");
+                Toast.makeText(DetallesPedido.this, "Se ha confirmado la recepción del pedido", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
@@ -158,37 +165,13 @@ public class DetallesPedido extends DialogFragment implements View.OnClickListen
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dismiss();
-                FragmentPedidos fragmentPedidos = new FragmentPedidos();
-                setFragment(fragmentPedidos);
-            }
-        });
-        toolbar.setTitle("Detalles del pedido");
-    }
-
-
-
-    //Método para establecer el fragment seleccionado dentro del FrameLayout
-    private void setFragment(Fragment fragment){
-        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.container, fragment);
-        fragmentTransaction.commit();
-
-    }
-
-    @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btnConfirmarRecepcion:
                 showDialog();
                 break;
             case R.id.fabMapaDestino:
-                Intent i = new Intent(getContext(), MapaDestino.class);
+                Intent i = new Intent(this, MapaDestino.class);
                 i.putExtra("longitud", lon);
                 i.putExtra("latitud", lat);
                 i.putExtra("direccion", direccion);

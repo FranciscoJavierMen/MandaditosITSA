@@ -40,7 +40,14 @@
             android:label="@string/title_activity_maps" />
         <activity
             android:name=".Cliente.Pedido.MapaDestino"
-            android:label="@string/title_activity_mapa_destino"></activity>
+            android:label="@string/title_activity_mapa_destino" />
+        <activity
+            android:name=".Cliente.Pedido.EstadoPedido.TabPedidos"
+            android:label="@string/title_activity_tab_pedidos"
+            android:theme="@style/AppTheme"></activity>
+
+        <activity
+            android:name=".Cliente.Pedido.DetallesPedido"/>
     </application>
 
 </manifest>

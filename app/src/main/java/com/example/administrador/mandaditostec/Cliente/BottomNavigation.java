@@ -21,6 +21,7 @@ public class BottomNavigation extends AppCompatActivity implements
         FragmentPerfil.OnFragmentInteractionListener{
     //Declaración del menú de navegación
     private BottomNavigationView navigation;
+
     //Declaración de los fragmentos
     private FragmentPedidos fragmentPedidos;
     private FragmentMandaderos fragmentMandaderos;

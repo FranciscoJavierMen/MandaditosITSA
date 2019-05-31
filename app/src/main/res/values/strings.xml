@@ -74,4 +74,11 @@
     <string name="confirmar_recepcion_pedido">Estas seguro que deseas confirmar la recepción de tu pedido? Si lo haces estás aceptando que el madadero ha entregado correctamente tu pedido al domicilo que especificaste, después de esto el mandadero se desblinda de cualquier responsabilidad sobre el pedido.</string>
     <string name="title_activity_mapa_destino">Map</string>
     <string name="notaMapa2">La dirección que se muestra en el marcador es la ubicación seleccionada como destino de entrega del pedido, el mandadero deberá entregar el pedido en esta dirección.</string>
+    <string name="title_activity_tab_pedidos">TabPedidos</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="tab_text_1">Pendientes</string>
+    <string name="tab_text_2">Finalizados</string>
+    <string name="tab_text_3">Rechazados</string>
+    <string name="descubre">Descubre todas las opciones que ofrece Mandaditos App, seguro que muchas de ellas te serán de utilidad al momento de realizar un pedido de mandado.</string>
+    <string name="acceder_lista_pedidos">Accede a tus listas de pedidos. Accede a tu lista de pedidos pendientes, pedidos aceptados, pedidos realizados y pedidos rechazados. Además accede al formulario para crear un nuevo pedido</string>
 </resources>
