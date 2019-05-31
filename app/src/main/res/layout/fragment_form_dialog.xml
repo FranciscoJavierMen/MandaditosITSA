@@ -33,5 +33,4 @@
 
         <include layout="@layout/formulario_pedido"/>
     </LinearLayout>
-
 </android.support.design.widget.CoordinatorLayout>

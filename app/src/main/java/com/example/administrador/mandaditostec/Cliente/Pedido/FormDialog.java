@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v7.widget.Toolbar;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.administrador.mandaditostec.Cliente.Mapa.Maps;
@@ -44,7 +45,8 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
     
     private FloatingActionButton fabEnviarPedido;
     private AppCompatButton btnMandadero, btnDireccionOrigen, btnDireccionDestino;
-    private TextView txtMandadero, txtDireccionOrigen, txtDireccionDestino;
+    private TextView txtMandadero, txtDireccionOrigen, txtDireccionDestino, txtPrevMandadero,
+            txtPrevPedido, txtPrevOrigen, txtPrevDestino;
     private EditText edtDescripcionPedido;
 
     private FirebaseDatabase firebaseDatabase;
@@ -106,6 +108,7 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
         txtDireccionOrigen = view.findViewById(R.id.txtDireccionOrigen);
         txtDireccionDestino = view.findViewById(R.id.txtDireccionDestino);
         edtDescripcionPedido = view.findViewById(R.id.edtDescripcionPedido);
+
     }
 
     private void seleccionarOrigen(){
@@ -164,6 +167,25 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
         }
     }
 
+    //Establece los datos de la vista previa del madado
+    private void setValuesPreview(View view){
+
+        txtPrevMandadero = view.findViewById(R.id.txtPrevMandadero);
+        txtPrevPedido = view.findViewById(R.id.txtPrevPedido);
+        txtPrevOrigen = view.findViewById(R.id.txtPrevOrigen);
+        txtPrevDestino = view.findViewById(R.id.txtPrevDestino);
+
+        String mandadero = txtMandadero.getText().toString();
+        String pedido = edtDescripcionPedido.getText().toString();
+        String origen = txtDireccionOrigen.getText().toString();
+        String destino = txtDireccionDestino.getText().toString();
+
+        txtPrevMandadero.setText(mandadero);
+        txtPrevPedido.setText(pedido);
+        txtPrevOrigen.setText(origen);
+        txtPrevDestino.setText(destino);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == MAP_POINT1){
@@ -206,8 +228,7 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
             switch (view.getId()){
                 case R.id.fabEnviarPedido:
                     if (validarPedido()){
-                        enviarPedido();
-                        dismiss();
+                        showDialogConfirmacion();
                     }
                     break;
                 case R.id.btnSeleccionarMandadero:
@@ -284,6 +305,36 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
         });
 
         dialog.show();
+    }
+
+    protected void showDialogConfirmacion(){
+
+        final Dialog dialogConfirm = new Dialog(getActivity());
+        dialogConfirm.setCancelable(true);
+
+        View view  = this.getLayoutInflater().inflate(R.layout.dialog_pregunta_pedido, null);
+        dialogConfirm.setContentView(view);
+        setValuesPreview(view);
+
+        AppCompatButton btnEnviar = view.findViewById(R.id.btnBotonEnviar);
+        AppCompatButton btnEditar = view.findViewById(R.id.btnBotonEditar);
+
+        btnEnviar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                enviarPedido();
+                dismiss();
+                dialogConfirm.dismiss();
+            }
+        });
+        btnEditar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogConfirm.dismiss();
+            }
+        });
+
+        dialogConfirm.show();
     }
 
     private boolean validarPedido() {

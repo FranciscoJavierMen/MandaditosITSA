@@ -27,6 +27,10 @@ import com.example.administrador.mandaditostec.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import static com.example.administrador.mandaditostec.Cliente.Pedido.FormDialog.TAG;
 
 public class DetallesPedido extends AppCompatActivity implements View.OnClickListener{
@@ -111,14 +115,16 @@ public class DetallesPedido extends AppCompatActivity implements View.OnClickLis
             case "pendiente":
                 txtEstado.setText("El pedido está en espera de ser aceptado");
                 fabEstado.setImageResource(R.drawable.ic_motorcycle);
+                btnConfirmar.setText("Pedido en espera");
+                btnConfirmar.setEnabled(false);
                 fabEstado.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.azul)));
                 break;
             case "aceptado":
                 txtEstado.setText("El pedido ha sido aceptado por el mandadero");
                 fabEstado.setImageResource(R.drawable.ic_done);
                 fabEstado.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.azul)));
-                btnConfirmar.setText("Pedido aceptado");
-                btnConfirmar.setEnabled(false);
+                btnConfirmar.setText("Confirmar recepción");
+                btnConfirmar.setEnabled(true);
                 btnConfirmar.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_boton_recibido));
                 break;
             case "finalizado":
@@ -158,6 +164,7 @@ public class DetallesPedido extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onClick(View view) {
                 databaseReference.child(id).child("estado").setValue("finalizado");
+                databaseReference.child("hora").setValue(getdateTime());
                 Toast.makeText(DetallesPedido.this, "Se ha confirmado la recepción del pedido", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
                 Intent i = new Intent(getApplicationContext(), TabPedidos.class);
@@ -173,6 +180,15 @@ public class DetallesPedido extends AppCompatActivity implements View.OnClickLis
         });
 
         dialog.show();
+    }
+
+    //Obtiene la fecha y hora acual
+    private String getdateTime(){
+        Calendar calendar = Calendar.getInstance();
+        String currentDate = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+        String currentHour = format.format(calendar.getTime());
+        return currentDate +" - "+ currentHour;
     }
 
     @Override

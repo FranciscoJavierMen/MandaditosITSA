@@ -37,7 +37,9 @@
     <string name="pedido_cancelado">Pedido cancelado</string>
     <string name="mensaje_cancelado">Tu pedido ha sido cancelado. Puedes volver y crear un nuevo pedido cuando quieras.</string>
     <string name="enviar_pedido">Enviar pedido</string>
-    <string name="mensaje_pregunta">Acabas de crear un pedido, pulsa en Ok para confirmar los datos y enviar tu pedido, o pulsa Cancelar para cancelar el pedido.</string>
+    <string name="mensaje_pregunta">
+        Acabas de crear un pedido, pulsa en Aceptar para confirmar los datos y
+        enviar tu pedido, o pulsa "Seguir editando" para editar el pedido.</string>
     <string name="cancelar">Cancelar</string>
     <string name="aceptar">Aceptar</string>
     <string name="title_activity_detalles_pedido">DetallesPedido</string>
@@ -83,4 +85,6 @@
     <string name="descubre">Descubre todas las opciones que ofrece Mandaditos App, seguro que muchas de ellas te serán de utilidad al momento de realizar un pedido de mandado.</string>
     <string name="acceder_lista_pedidos">Accede a tus listas de pedidos o realiza un nuevo pedido. Accede a tu lista de pedidos pendientes, pedidos aceptados, pedidos realizados y pedidos rechazados. Además accede al formulario para crear un nuevo pedido</string>
     <string name="sin_pedidos">Aún no hay pedidos aquí</string>
+    <string name="seguir_editando">Seguir editando</string>
+    <string name="confirmar_datos">Confirma los datos</string>
 </resources>
