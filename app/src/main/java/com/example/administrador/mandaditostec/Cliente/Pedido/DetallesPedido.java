@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.administrador.mandaditostec.Cliente.Pedido.EstadoPedido.Pendiente;
+import com.example.administrador.mandaditostec.Cliente.Pedido.EstadoPedido.TabPedidos;
 import com.example.administrador.mandaditostec.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -159,6 +160,8 @@ public class DetallesPedido extends AppCompatActivity implements View.OnClickLis
                 databaseReference.child(id).child("estado").setValue("finalizado");
                 Toast.makeText(DetallesPedido.this, "Se ha confirmado la recepción del pedido", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
+                Intent i = new Intent(getApplicationContext(), TabPedidos.class);
+                startActivity(i);
             }
         });
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView android:layout_marginBottom="3dp"
+<android.support.v7.widget.CardView
+    android:layout_marginBottom="3dp"
     android:layout_marginTop="3dp"
     app:cardElevation="0dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -8,15 +9,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        android:baselineAligned="true"
+        android:baselineAligned="false"
+        android:weightSum="10"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?android:attr/selectableItemBackground"
         android:orientation="horizontal">
 
         <FrameLayout
-            android:padding="20dp"
-            android:layout_width="wrap_content"
+            android:layout_weight="2"
+            android:padding="10dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
@@ -25,12 +28,13 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
-                android:src="@drawable/scooter"/>
+                android:src="@drawable/scooter"
+                android:contentDescription="@string/detallesPedidpLabel" />
 
         </FrameLayout>
 
         <LinearLayout
-            android:layout_weight="3"
+            android:layout_weight="7"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -39,7 +43,7 @@
                 android:id="@+id/txtDireccionPedido"
                 android:maxLines="1"
                 android:layout_marginTop="10dp"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/direccionDestino"
                 android:textStyle="bold"/>
@@ -49,7 +53,7 @@
                 android:maxLines="5"
                 android:minLines="3"
                 android:layout_marginTop="5dp"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/notaMapa"/>
 
@@ -57,17 +61,24 @@
                 android:id="@+id/txtHoraPedido"
                 android:layout_marginTop="3dp"
                 android:layout_marginBottom="2dp"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/azul"
                 android:textStyle="italic"
                 android:textSize="12sp"
                 android:text="@string/direccionDestino"/>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@android:color/darker_gray"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="2dp" />
+
         </LinearLayout>
 
         <FrameLayout
-            android:layout_weight="0.2"
+            android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -76,11 +87,12 @@
                 android:layout_width="14dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center"
-                android:src="@drawable/flechaderecha"/>
+                android:src="@drawable/flechaderecha"
+                android:contentDescription="@string/detallesPedidpLabel" />
 
         </FrameLayout>
-
 
     </LinearLayout>
 
 </android.support.v7.widget.CardView>
+
