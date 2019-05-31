@@ -22,8 +22,6 @@ import android.widget.Toast;
 import com.example.administrador.mandaditostec.Cliente.Pedido.DetallesPedido;
 import com.example.administrador.mandaditostec.Cliente.Pedido.ModeloPedidos;
 import com.example.administrador.mandaditostec.R;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,7 +34,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-public class Rechazado extends Fragment {
+public class Aceptado extends Fragment {
 
     //Firebase
     private DatabaseReference databaseReference;
@@ -55,7 +53,6 @@ public class Rechazado extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_tab_pendiente, container, false);
-        //inicializarFirebase();
         inicializarComponentes(view);
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -70,7 +67,7 @@ public class Rechazado extends Fragment {
                     Thread.sleep(1000);
                     refreshPedidos.setRefreshing(false);
                     Snackbar snackbar = Snackbar
-                            .make(coordinatorLayout, "Lista de pedidos pendientes actualizada", Snackbar.LENGTH_LONG);
+                            .make(coordinatorLayout, "Lista de pedidos aceptada actualizada", Snackbar.LENGTH_LONG);
 
                     snackbar.setActionTextColor(Color.YELLOW);
                     snackbar.show();
@@ -87,13 +84,13 @@ public class Rechazado extends Fragment {
     }
 
     private void pedidosObjetos(){
-        databaseReference.child("Pedido").orderByChild("estado").equalTo("rechazado")
+        databaseReference.child("Pedido").orderByChild("estado").equalTo("aceptado")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Iterator<DataSnapshot> items = dataSnapshot.getChildren().iterator();
                         checkData(dataSnapshot);
-                        Toast.makeText(getActivity(), "No. d epedidos rechazados : " + dataSnapshot.getChildrenCount(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "No. de pedidos aceptados : " + dataSnapshot.getChildrenCount(), Toast.LENGTH_SHORT).show();
                         pedidos.clear();
                         while (items.hasNext()) {
                             DataSnapshot item = items.next();
@@ -188,6 +185,13 @@ public class Rechazado extends Fragment {
         }
     }
 
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        pedidosObjetos();
+    }
+
     private void checkData(DataSnapshot dataSnapshot){
         if (dataSnapshot.getChildrenCount() < 1){
             recyclerPedidos.setVisibility(View.GONE);
@@ -200,13 +204,6 @@ public class Rechazado extends Fragment {
             textEmpty.setVisibility(View.GONE);
         }
     }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        pedidosObjetos();
-    }
-
 
     //Inicializa los componentes (vistas)
     private void inicializarComponentes(View view) {
@@ -240,3 +237,4 @@ public class Rechazado extends Fragment {
         return addresName + " - " + cityName;
     }
 }
+

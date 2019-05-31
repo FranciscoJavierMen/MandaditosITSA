@@ -108,13 +108,21 @@ public class DetallesPedido extends AppCompatActivity implements View.OnClickLis
 
         switch (estado){
             case "pendiente":
-                txtEstado.setText("El pedido está en camino");
+                txtEstado.setText("El pedido está en espera de ser aceptado");
                 fabEstado.setImageResource(R.drawable.ic_motorcycle);
                 fabEstado.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.azul)));
                 break;
-            case "realizado":
-                txtEstado.setText("El pedido ya ha sido entregado");
+            case "aceptado":
+                txtEstado.setText("El pedido ha sido aceptado por el mandadero");
                 fabEstado.setImageResource(R.drawable.ic_done);
+                fabEstado.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.azul)));
+                btnConfirmar.setText("Pedido aceptado");
+                btnConfirmar.setEnabled(false);
+                btnConfirmar.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_boton_recibido));
+                break;
+            case "finalizado":
+                txtEstado.setText("El pedido ya ha te ha sido entregado");
+                fabEstado.setImageResource(R.drawable.ic_gift);
                 fabEstado.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.verde)));
                 btnConfirmar.setText("Pedido recibido");
                 btnConfirmar.setEnabled(false);
@@ -148,7 +156,7 @@ public class DetallesPedido extends AppCompatActivity implements View.OnClickLis
         btnAceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                databaseReference.child(id).child("estado").setValue("realizado");
+                databaseReference.child(id).child("estado").setValue("finalizado");
                 Toast.makeText(DetallesPedido.this, "Se ha confirmado la recepción del pedido", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }

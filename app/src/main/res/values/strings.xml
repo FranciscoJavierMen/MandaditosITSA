@@ -77,8 +77,10 @@
     <string name="title_activity_tab_pedidos">TabPedidos</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="tab_text_1">Pendientes</string>
-    <string name="tab_text_2">Finalizados</string>
-    <string name="tab_text_3">Rechazados</string>
+    <string name="tab_text_2">Aceptados</string>
+    <string name="tab_text_3">Finalizados</string>
+    <string name="tab_text_4">Rechazados</string>
     <string name="descubre">Descubre todas las opciones que ofrece Mandaditos App, seguro que muchas de ellas te serán de utilidad al momento de realizar un pedido de mandado.</string>
-    <string name="acceder_lista_pedidos">Accede a tus listas de pedidos. Accede a tu lista de pedidos pendientes, pedidos aceptados, pedidos realizados y pedidos rechazados. Además accede al formulario para crear un nuevo pedido</string>
+    <string name="acceder_lista_pedidos">Accede a tus listas de pedidos o realiza un nuevo pedido. Accede a tu lista de pedidos pendientes, pedidos aceptados, pedidos realizados y pedidos rechazados. Además accede al formulario para crear un nuevo pedido</string>
+    <string name="sin_pedidos">Aún no hay pedidos aquí</string>
 </resources>

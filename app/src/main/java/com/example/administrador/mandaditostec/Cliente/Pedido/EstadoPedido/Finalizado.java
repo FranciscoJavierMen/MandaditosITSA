@@ -15,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,11 +36,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-public class Realizado extends Fragment {
+public class Finalizado extends Fragment {
 
     //Firebase
     private DatabaseReference databaseReference;
-
+    private ImageView avion;
+    private TextView textEmpty;
 
     //Lista y modelo
     private RecyclerView recyclerPedidos;
@@ -85,12 +87,13 @@ public class Realizado extends Fragment {
     }
 
     private void pedidosObjetos(){
-        databaseReference.child("Pedido").orderByChild("estado").equalTo("aceptado")
+        databaseReference.child("Pedido").orderByChild("estado").equalTo("finalizado")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Iterator<DataSnapshot> items = dataSnapshot.getChildren().iterator();
-                        Toast.makeText(getActivity(), "Pedidos realizados : " + dataSnapshot.getChildrenCount(), Toast.LENGTH_SHORT).show();
+                        checkData(dataSnapshot);
+                        Toast.makeText(getActivity(), "No. de pedidos finalizados: " + dataSnapshot.getChildrenCount(), Toast.LENGTH_SHORT).show();
                         pedidos.clear();
                         while (items.hasNext()) {
                             DataSnapshot item = items.next();
@@ -185,6 +188,19 @@ public class Realizado extends Fragment {
         }
     }
 
+    private void checkData(DataSnapshot dataSnapshot){
+        if (dataSnapshot.getChildrenCount() < 1){
+            recyclerPedidos.setVisibility(View.GONE);
+            avion.setVisibility(View.VISIBLE);
+            textEmpty.setVisibility(View.VISIBLE);
+        }
+        else{
+            recyclerPedidos.setVisibility(View.VISIBLE);
+            avion.setVisibility(View.GONE);
+            textEmpty.setVisibility(View.GONE);
+        }
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -193,6 +209,8 @@ public class Realizado extends Fragment {
 
     //Inicializa los componentes (vistas)
     private void inicializarComponentes(View view) {
+        avion = view.findViewById(R.id.imgEmpty);
+        textEmpty = view.findViewById(R.id.textEmpty);
         recyclerPedidos = view.findViewById(R.id.recyclerPedidos);
         refreshPedidos = view.findViewById(R.id.refreshPedidos);
         coordinatorLayout = view.findViewById(R.id.coordinatorPedidos);

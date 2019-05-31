@@ -18,6 +18,7 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +45,8 @@ public class Pendiente extends Fragment {
     //Firebase
     private DatabaseReference databaseReference;
 
+    private ImageView avion;
+    private TextView textEmpty;
 
     //Lista y modelo
     private RecyclerView recyclerPedidos;
@@ -93,7 +96,8 @@ public class Pendiente extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterator<DataSnapshot> items = dataSnapshot.getChildren().iterator();
-                Toast.makeText(getActivity(), "Pedidos pendientes : " + dataSnapshot.getChildrenCount(), Toast.LENGTH_SHORT).show();
+                checkData(dataSnapshot);
+                Toast.makeText(getActivity(), "No. de pedidos pendientes: " + dataSnapshot.getChildrenCount(), Toast.LENGTH_SHORT).show();
                 pedidos.clear();
                 while (items.hasNext()) {
                     DataSnapshot item = items.next();
@@ -194,8 +198,23 @@ public class Pendiente extends Fragment {
         pedidosObjetos();
     }
 
+    private void checkData(DataSnapshot dataSnapshot){
+        if (dataSnapshot.getChildrenCount() < 1){
+            recyclerPedidos.setVisibility(View.GONE);
+            avion.setVisibility(View.VISIBLE);
+            textEmpty.setVisibility(View.VISIBLE);
+        }
+        else{
+            recyclerPedidos.setVisibility(View.VISIBLE);
+            avion.setVisibility(View.GONE);
+            textEmpty.setVisibility(View.GONE);
+        }
+    }
+
     //Inicializa los componentes (vistas)
     private void inicializarComponentes(View view) {
+        avion = view.findViewById(R.id.imgEmpty);
+        textEmpty = view.findViewById(R.id.textEmpty);
         recyclerPedidos = view.findViewById(R.id.recyclerPedidos);
         refreshPedidos = view.findViewById(R.id.refreshPedidos);
         coordinatorLayout = view.findViewById(R.id.coordinatorPedidos);

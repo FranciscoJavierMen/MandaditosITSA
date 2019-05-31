@@ -42,6 +42,7 @@ public class TabPedidos extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = findViewById(R.id.tabs);
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         fabPedido = findViewById(R.id.fabPedido);
 
         fabPedido.setOnClickListener(new View.OnClickListener() {
@@ -92,20 +93,20 @@ public class TabPedidos extends AppCompatActivity {
                 case 0:
                     return new Pendiente();
                 case 1:
-                    return new Realizado();
+                    return new Aceptado();
                 case 2:
+                    return new Finalizado();
+                case 3:
                     return new Rechazado();
                 default:
                     return null;
             }
         }
 
-
-
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            // Show 4 total pages.
+            return 4;
         }
     }
 }
