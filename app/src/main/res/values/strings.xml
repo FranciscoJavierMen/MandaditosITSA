@@ -15,7 +15,7 @@
     </string>
     <string name="title_activity_bottom_navigation">BottomNavigation</string>
     <string name="title_mandaderos">Mandaderos</string>
-    <string name="title_pedidos">Pedidos</string>
+    <string name="title_inicio">Inicio</string>
     <string name="title_perfil">Perfil</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -87,4 +87,22 @@
     <string name="sin_pedidos">Aún no hay pedidos aquí</string>
     <string name="seguir_editando">Seguir editando</string>
     <string name="confirmar_datos">Confirma los datos</string>
+    <string name="title_activity_acceder">Acceder</string>
+    <string name="correo">Correo electrónico</string>
+    <string name="contrasena">Contraseña</string>
+    <string name="acceder">Acceder</string>
+    <string name="sin_cuenta">¿Aún no tienes cuenta?</string>
+    <string name="crear_cuenta">Crear cuenta</string>
+    <string name="tipo_cuenta">Seleccione el tipo de cuenta</string>
+    <string name="nota_cuenta">
+        Seleccione el tipo de cuenta según sus necesidades.\n\nSi desea utilizar
+        la aplicación para ofrecer un servicio de mandados cree una cuenta de Mandadero. Si lo que
+        desea es realizar pedidos mediante la aplicación cree una cuenta de Cliente.
+    </string>
+    <string name="cliente">Cliente</string>
+    <string name="title_activity_registro_cliente">RegistroCliente</string>
+    <string name="title_activity_registro_mandadero">RegistroMandadero</string>
+    <string name="nombre_usuario">Nombre de usuario</string>
+    <string name="confirmar_contrasena">Confirmar contraseña</string>
+    <string name="con_cuenta">¿Ya tienes una cuenta?</string>
 </resources>

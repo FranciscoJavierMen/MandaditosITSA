@@ -54,7 +54,7 @@ public class MapaDestino extends FragmentActivity implements OnMapReadyCallback 
 
         // Add a marker in Sydney and move the camera
         LatLng direction = new LatLng(lat, lon);
-        mMap.addMarker(new MarkerOptions().position(direction).title(direccion));
+        mMap.addMarker(new MarkerOptions().position(direction).title(direccion).snippet("Dirección de entrega"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(direction, 16f));
 
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);

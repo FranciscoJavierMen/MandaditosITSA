@@ -49,7 +49,6 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
             txtPrevPedido, txtPrevOrigen, txtPrevDestino;
     private EditText edtDescripcionPedido;
 
-    private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
 
     public static FormDialog display(FragmentManager fragmentManager) {
@@ -95,7 +94,7 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
 
     private void inicializarFirebase(){
         FirebaseApp.initializeApp(getActivity().getApplicationContext());
-        firebaseDatabase = FirebaseDatabase.getInstance();
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
     }
 

@@ -114,7 +114,8 @@ public class DetallesPedido extends AppCompatActivity implements View.OnClickLis
         switch (estado){
             case "pendiente":
                 txtEstado.setText("El pedido está en espera de ser aceptado");
-                fabEstado.setImageResource(R.drawable.ic_motorcycle);
+                fabEstado.setImageResource(R.drawable.ic_reloj);
+                fabRecepcion.setImageResource(R.drawable.ic_reloj);
                 btnConfirmar.setText("Pedido en espera");
                 btnConfirmar.setEnabled(false);
                 fabEstado.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.azul)));
@@ -130,6 +131,7 @@ public class DetallesPedido extends AppCompatActivity implements View.OnClickLis
             case "finalizado":
                 txtEstado.setText("El pedido ya ha te ha sido entregado");
                 fabEstado.setImageResource(R.drawable.ic_gift);
+                fabRecepcion.setImageResource(R.drawable.ic_gift);
                 fabEstado.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.verde)));
                 btnConfirmar.setText("Pedido recibido");
                 btnConfirmar.setEnabled(false);
@@ -137,9 +139,9 @@ public class DetallesPedido extends AppCompatActivity implements View.OnClickLis
                 break;
             case "rechazado":
                 txtEstado.setText("El pedido ha sido rechazado por el mandadero");
-                fabEstado.setImageResource(R.drawable.ic_close_black_24dp);
+                fabEstado.setImageResource(R.drawable.ic_close_white);
                 fabEstado.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.escarlata)));
-                fabRecepcion.setImageResource(R.drawable.ic_cancel);
+                fabRecepcion.setImageResource(R.drawable.ic_close_white);
                 fabRecepcion.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.naranja)));
                 btnConfirmar.setText("Pedido rechazado");
                 btnConfirmar.setEnabled(false);
