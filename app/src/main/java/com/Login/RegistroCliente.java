@@ -18,6 +18,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 public class RegistroCliente extends AppCompatActivity implements View.OnClickListener{
 
@@ -26,6 +31,8 @@ public class RegistroCliente extends AppCompatActivity implements View.OnClickLi
 
     private FirebaseAuth mAuth;
     private ProgressDialog progressDialog;
+    private DatabaseReference database;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,24 +64,46 @@ public class RegistroCliente extends AppCompatActivity implements View.OnClickLi
             progressDialog.setMessage("Se esta creando tu cuenta");
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.show();
-            regiterUser(email, password);
+            regiterUser(name, email, password);
         } else {
             Toast.makeText(RegistroCliente.this, "Algunos campos están vacios...", Toast.LENGTH_SHORT).show();
         }
     }
 
     //Registra un nuevo usuario
-    private void regiterUser( String email, String pass){
+    private void regiterUser(final String name, final String email, String pass){
         mAuth.createUserWithEmailAndPassword(email, pass)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            progressDialog.dismiss();
-                            Toast.makeText(RegistroCliente.this, "Registro realizado con éxito", Toast.LENGTH_SHORT).show();
-                            Intent inicio = new Intent(RegistroCliente.this, Acceder.class);
-                            startActivity(inicio);
-                            finish();
+
+                            FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+                            String uid = current_user.getUid();
+
+                            database = FirebaseDatabase.getInstance().getReference().child("Cliente").child(uid);
+
+                            HashMap<String, String> cliente = new HashMap<>();
+                            cliente.put("nombre", name);
+                            cliente.put("correo", email);
+                            cliente.put("estado", "Hola, estoy usando Mandaditos TEC");
+                            cliente.put("imagen", "default image");
+
+                            database.setValue(cliente).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()){
+                                        progressDialog.dismiss();
+
+                                        Toast.makeText(RegistroCliente.this, "Registro realizado con éxito", Toast.LENGTH_SHORT).show();
+                                        Intent inicio = new Intent(RegistroCliente.this, Acceder.class);
+                                        startActivity(inicio);
+                                        finish();
+                                    }
+                                }
+                            });
+
+
                         } else {
                             progressDialog.hide();
                             Toast.makeText(RegistroCliente.this, "No se ha podido realizar el registro, intentalo más tarde.", Toast.LENGTH_SHORT).show();

@@ -1,5 +1,7 @@
 package com.example.administrador.mandaditostec.Cliente.Pedido.EstadoPedido;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -14,14 +16,21 @@ import android.view.MenuItem;
 import android.view.View;
 
 
+import com.Login.Acceder;
+import com.example.administrador.mandaditostec.Cliente.BottomNavigation;
 import com.example.administrador.mandaditostec.Cliente.Pedido.FormDialog;
 import com.example.administrador.mandaditostec.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class TabPedidos extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     private ViewPager mViewPager;
+    //Instancia a Autentificación de Firebase
+    private FirebaseAuth mAuth;
+    private ProgressDialog progressDialog;
 
     //Botón flotante
     private FloatingActionButton fabPedido;
@@ -30,6 +39,11 @@ public class TabPedidos extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab_pedidos);
+
+        //Inicializa instancia de autentificación de Firebase
+        mAuth = FirebaseAuth.getInstance();
+
+        progressDialog = new ProgressDialog(TabPedidos.this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -57,6 +71,25 @@ public class TabPedidos extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        //Usuario no logeado regresa a activity de registro
+        if (currentUser == null){
+            backToWelcome();
+        }
+    }
+
+    //Método para volver a activitu de logeo y registro
+    private void backToWelcome() {
+        Intent start = new Intent(TabPedidos.this, Acceder.class);
+        startActivity(start);
+        finish();
+    }
+
     //Abre el dialogo con el formulario de pedidos
     private void abrirDialogo(){
         FormDialog.display(getSupportFragmentManager());
@@ -75,6 +108,13 @@ public class TabPedidos extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
+            progressDialog.setTitle("Cerrando sesión");
+            progressDialog.setMessage("Saliendo de tu cuenta");
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.show();
+            FirebaseAuth.getInstance().signOut();
+            backToWelcome();
+            progressDialog.dismiss();
             return true;
         }
 
