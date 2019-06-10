@@ -13,6 +13,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.administrador.mandaditostec.Cliente.checkNetworkConnection;
 import com.example.administrador.mandaditostec.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -32,6 +33,7 @@ public class RegistroMandadero extends AppCompatActivity implements View.OnClick
     private FirebaseAuth mAuth;
     private ProgressDialog progressDialog;
     private DatabaseReference database;
+    com.example.administrador.mandaditostec.Cliente.checkNetworkConnection checkNetworkConnection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,7 @@ public class RegistroMandadero extends AppCompatActivity implements View.OnClick
         });
 
         mAuth = FirebaseAuth.getInstance();
+        checkNetworkConnection = new checkNetworkConnection(this);
 
         init();
     }
@@ -144,7 +147,11 @@ public class RegistroMandadero extends AppCompatActivity implements View.OnClick
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.fabRegistrarMandadero:
-                getData();
+                if (checkNetworkConnection.isConnected()){
+                    getData();
+                } else {
+                    Toast.makeText(this, "No tienes conexion a internet\nIntentalo más tarde.", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }

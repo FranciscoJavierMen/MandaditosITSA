@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.administrador.mandaditostec.Cliente.BottomNavigation;
+import com.example.administrador.mandaditostec.Cliente.checkNetworkConnection;
 import com.example.administrador.mandaditostec.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -29,6 +30,7 @@ public class Acceder extends AppCompatActivity implements View.OnClickListener{
     private TextInputLayout txtCorreo, txtContrasena;
     private AppCompatButton btnAcceder;
     private TextView txtCrear;
+    checkNetworkConnection checkNetworkConnection;
 
     private ProgressDialog progressDialog;
 
@@ -39,6 +41,7 @@ public class Acceder extends AppCompatActivity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_acceder);
 
+        checkNetworkConnection = new checkNetworkConnection(this);
         mAuth = FirebaseAuth.getInstance();
 
         init();
@@ -141,7 +144,11 @@ public class Acceder extends AppCompatActivity implements View.OnClickListener{
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btnAcceder:
-                getData();
+                if (checkNetworkConnection.isConnected()){
+                    getData();
+                } else {
+                    Toast.makeText(this, "No tienes conexion a internet\nIntentalo más tarde.", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.txtCrearCuenta:
                 showDialog();
