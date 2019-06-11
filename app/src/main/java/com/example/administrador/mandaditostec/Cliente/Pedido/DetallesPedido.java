@@ -166,7 +166,7 @@ public class DetallesPedido extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onClick(View view) {
                 databaseReference.child(id).child("estado").setValue("finalizado");
-                databaseReference.child("hora").setValue(getdateTime());
+                databaseReference.child(id).child("hora").setValue(getdateTime());
                 Toast.makeText(DetallesPedido.this, "Se ha confirmado la recepción del pedido", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
                 Intent i = new Intent(getApplicationContext(), TabPedidos.class);

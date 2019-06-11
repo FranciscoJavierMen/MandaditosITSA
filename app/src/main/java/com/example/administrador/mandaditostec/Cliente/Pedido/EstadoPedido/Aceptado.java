@@ -24,6 +24,8 @@ import com.example.administrador.mandaditostec.Cliente.Pedido.DetallesPedido;
 import com.example.administrador.mandaditostec.Cliente.Pedido.ModeloPedidos;
 import com.example.administrador.mandaditostec.Cliente.checkNetworkConnection;
 import com.example.administrador.mandaditostec.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,6 +42,8 @@ public class Aceptado extends Fragment {
 
     //Firebase
     private DatabaseReference databaseReference;
+    private FirebaseAuth mAuth;
+    private String idCliente;
 
     private ImageView avion;
     private TextView textEmpty;
@@ -55,6 +59,11 @@ public class Aceptado extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         checkNetworkConnection = new checkNetworkConnection(getContext());
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+        if (current_user != null) {
+            idCliente = current_user.getUid();
+        }
 
     }
 
@@ -96,6 +105,36 @@ public class Aceptado extends Fragment {
         return view;
     }
 
+    private void isCurrenUser(){
+        databaseReference.child("Pedido")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Iterator<DataSnapshot> items = dataSnapshot.getChildren().iterator();
+                        checkData(dataSnapshot);
+                        pedidos.clear();
+                        while (items.hasNext()) {
+                            DataSnapshot item = items.next();
+                            ModeloPedidos pedido = item.getValue(ModeloPedidos.class);
+
+                            if (pedido.getIdCliente().equals(idCliente) && pedido.getEstado().equals("aceptado")){
+                                pedidos.add(pedido);
+                            }
+
+                        }
+                        recyclerPedidos.setAdapter(new pedidosAdapter(pedidos));
+                        recyclerPedidos.getAdapter().notifyDataSetChanged();
+                        databaseReference.child("Pedido").removeEventListener(this);
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
     private void pedidosObjetos(){
         databaseReference.child("Pedido").orderByChild("estado").equalTo("aceptado")
                 .addValueEventListener(new ValueEventListener() {
@@ -113,7 +152,7 @@ public class Aceptado extends Fragment {
 
                         recyclerPedidos.setAdapter(new pedidosAdapter(pedidos));
                         recyclerPedidos.getAdapter().notifyDataSetChanged();
-                        databaseReference.child("Pedido").orderByChild("estado").equalTo("rechazado").removeEventListener(this);
+                        databaseReference.child("Pedido").orderByChild("estado").equalTo("aceptado").removeEventListener(this);
 
                     }
 
@@ -212,7 +251,7 @@ public class Aceptado extends Fragment {
             textEmpty.setVisibility(View.VISIBLE);
         }
         else{
-            pedidosObjetos();
+            isCurrenUser();
             recyclerPedidos.setVisibility(View.VISIBLE);
             avion.setVisibility(View.GONE);
             textEmpty.setVisibility(View.GONE);

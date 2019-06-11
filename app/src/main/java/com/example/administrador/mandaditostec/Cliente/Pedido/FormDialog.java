@@ -24,6 +24,8 @@ import com.example.administrador.mandaditostec.Cliente.checkNetworkConnection;
 import com.example.administrador.mandaditostec.R;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -48,6 +50,7 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
     private String latO, lonO, latD, lonD;
     private String nombre;
     private String idMandadero;
+    private String idCliente;
 
     private FloatingActionButton fabEnviarPedido;
     private AppCompatButton btnMandadero, btnDireccionOrigen, btnDireccionDestino;
@@ -56,6 +59,8 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
     private EditText edtDescripcionPedido;
 
     private DatabaseReference databaseReference;
+    //Instancia a Autentificación de Firebase
+    private FirebaseAuth mAuth;
     private com.example.administrador.mandaditostec.Cliente.checkNetworkConnection checkNetworkConnection;
 
     public static FormDialog display(FragmentManager fragmentManager) {
@@ -69,11 +74,17 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         setStyle(FormDialog.STYLE_NORMAL, R.style.AppTheme_FullScreenDialog);
         checkNetworkConnection = new checkNetworkConnection(getContext());
+        //Inicializa instancia de autentificación de Firebase
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        idCliente = currentUser.getUid();
 
         if (getArguments() != null){
             Bundle args = getArguments();
             idMandadero = args.getString("id");
             nombre = args.getString("nombre");
+        } else {
+            nombre = "Mandadero no seleccionado";
         }
 
     }
@@ -322,6 +333,7 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
             modelo.setPedido(pedido);
             modelo.setHora(getdateTime());
             modelo.setIdMandadero(idMandadero);
+            modelo.setIdCliente(idCliente);
             modelo.setEstado("pendiente");
 
             databaseReference.child("Pedido").child(modelo.getId()).setValue(modelo);
@@ -391,7 +403,7 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
         direccionOrigen = txtDireccionOrigen.getText().toString();
         direccionDestino = txtDireccionDestino.getText().toString();
 
-        if (pedido.equals("") || mandadero.equals(" ")
+        if (pedido.equals("") || mandadero.equals("Mandadero no seleccionado")
                 || direccionOrigen.equals("Dirección no seleccionada") 
                 || direccionDestino.equals("Dirección no seleccionada")){
             validar = false;
@@ -401,7 +413,7 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
             edtDescripcionPedido.setError("Campo requerido");
         }
 
-        if (mandadero.equals("Nombre del mandaderos")){
+        if (mandadero.equals("Mandadero no seleccionado")){
             txtMandadero.setError("Requerido");
             txtMandadero.setText("Debe seleccionar un mandadero");
             txtMandadero.setTextColor(getResources().getColor(R.color.rojo, null));

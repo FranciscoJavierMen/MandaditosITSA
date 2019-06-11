@@ -58,7 +58,6 @@ public class BottomNavigation extends AppCompatActivity implements
     @Override
     protected void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         //Usuario no logeado regresa a activity de registro

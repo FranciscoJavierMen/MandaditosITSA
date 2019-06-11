@@ -29,6 +29,8 @@ import com.example.administrador.mandaditostec.Cliente.checkNetworkConnection;
 import com.example.administrador.mandaditostec.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,6 +52,9 @@ public class Pendiente extends Fragment {
     private ImageView avion;
     private TextView textEmpty;
 
+    private FirebaseAuth mAuth;
+    private String idCliente;
+
     //Lista y modelo
     private RecyclerView recyclerPedidos;
     private SwipeRefreshLayout refreshPedidos;
@@ -62,6 +67,11 @@ public class Pendiente extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         checkNetworkConnection = new checkNetworkConnection(getContext());
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+        if (current_user != null) {
+            idCliente = current_user.getUid();
+        }
 
     }
 
@@ -103,6 +113,36 @@ public class Pendiente extends Fragment {
         recyclerPedidos.setLayoutManager(mLayoutManager);
 
         return view;
+    }
+
+    private void isCurrenUser(){
+        databaseReference.child("Pedido")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Iterator<DataSnapshot> items = dataSnapshot.getChildren().iterator();
+                        checkData(dataSnapshot);
+                        pedidos.clear();
+                        while (items.hasNext()) {
+                            DataSnapshot item = items.next();
+                            ModeloPedidos pedido = item.getValue(ModeloPedidos.class);
+
+                            if (pedido.getIdCliente().equals(idCliente) && pedido.getEstado().equals("pendiente")) {
+                                pedidos.add(pedido);
+                            }
+
+                        }
+                        recyclerPedidos.setAdapter(new pedidosAdapter(pedidos));
+                        recyclerPedidos.getAdapter().notifyDataSetChanged();
+                        databaseReference.child("Pedido").removeEventListener(this);
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     private void pedidosObjetos(){
@@ -220,7 +260,7 @@ public class Pendiente extends Fragment {
             textEmpty.setVisibility(View.VISIBLE);
         }
         else{
-            pedidosObjetos();
+            isCurrenUser();
             recyclerPedidos.setVisibility(View.VISIBLE);
             avion.setVisibility(View.GONE);
             textEmpty.setVisibility(View.GONE);
