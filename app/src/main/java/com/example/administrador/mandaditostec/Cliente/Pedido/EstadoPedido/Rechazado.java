@@ -6,6 +6,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 import com.example.administrador.mandaditostec.Cliente.Pedido.DetallesPedido;
 import com.example.administrador.mandaditostec.Cliente.Pedido.ModeloPedidos;
+import com.example.administrador.mandaditostec.Cliente.checkNetworkConnection;
 import com.example.administrador.mandaditostec.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -49,6 +51,15 @@ public class Rechazado extends Fragment {
     private SwipeRefreshLayout refreshPedidos;
     private CoordinatorLayout coordinatorLayout;
     private ArrayList<ModeloPedidos> pedidos = new ArrayList<>();
+
+    private com.example.administrador.mandaditostec.Cliente.checkNetworkConnection checkNetworkConnection;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        checkNetworkConnection = new checkNetworkConnection(getContext());
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -210,7 +221,19 @@ public class Rechazado extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        pedidosObjetos();
+        if (!checkNetworkConnection.isConnected()){
+            recyclerPedidos.setVisibility(View.GONE);
+            avion.setImageResource(R.drawable.no_wifi);
+            avion.setVisibility(View.VISIBLE);
+            textEmpty.setText("No estas conectado a internet");
+            textEmpty.setVisibility(View.VISIBLE);
+        }
+        else{
+            pedidosObjetos();
+            recyclerPedidos.setVisibility(View.VISIBLE);
+            avion.setVisibility(View.GONE);
+            textEmpty.setVisibility(View.GONE);
+        }
     }
 
 

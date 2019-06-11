@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.administrador.mandaditostec.Cliente.Mapa.Maps;
+import com.example.administrador.mandaditostec.Cliente.checkNetworkConnection;
 import com.example.administrador.mandaditostec.R;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.FirebaseApp;
@@ -50,6 +51,7 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
     private EditText edtDescripcionPedido;
 
     private DatabaseReference databaseReference;
+    private com.example.administrador.mandaditostec.Cliente.checkNetworkConnection checkNetworkConnection;
 
     public static FormDialog display(FragmentManager fragmentManager) {
         FormDialog formDialog = new FormDialog();
@@ -61,19 +63,27 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(FormDialog.STYLE_NORMAL, R.style.AppTheme_FullScreenDialog);
+        checkNetworkConnection = new checkNetworkConnection(getContext());
 
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Dialog dialog = getDialog();
-        if (dialog != null) {
-            int width = ViewGroup.LayoutParams.MATCH_PARENT;
-            int height = ViewGroup.LayoutParams.MATCH_PARENT;
-            dialog.getWindow().setLayout(width, height);
-            dialog.getWindow().setWindowAnimations(R.style.AppTheme_Slide);
+        
+        if (checkNetworkConnection.isConnected()){
+            Dialog dialog = getDialog();
+            if (dialog != null) {
+                int width = ViewGroup.LayoutParams.MATCH_PARENT;
+                int height = ViewGroup.LayoutParams.MATCH_PARENT;
+                dialog.getWindow().setLayout(width, height);
+                dialog.getWindow().setWindowAnimations(R.style.AppTheme_Slide);
+            }
+        } else {
+            Toast.makeText(getContext(), "No puedes realizar mandados sin conexión.\nConectate a internet y vuelve a intentar.", Toast.LENGTH_SHORT).show();
+            dismiss();
         }
+        
     }
 
     @Override
@@ -107,7 +117,6 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
         txtDireccionOrigen = view.findViewById(R.id.txtDireccionOrigen);
         txtDireccionDestino = view.findViewById(R.id.txtDireccionDestino);
         edtDescripcionPedido = view.findViewById(R.id.edtDescripcionPedido);
-
     }
 
     private void seleccionarOrigen(){

@@ -14,11 +14,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 
 import com.Login.Acceder;
 import com.example.administrador.mandaditostec.Cliente.BottomNavigation;
 import com.example.administrador.mandaditostec.Cliente.Pedido.FormDialog;
+import com.example.administrador.mandaditostec.Cliente.checkNetworkConnection;
 import com.example.administrador.mandaditostec.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,10 +37,14 @@ public class TabPedidos extends AppCompatActivity {
     //Botón flotante
     private FloatingActionButton fabPedido;
 
+    private com.example.administrador.mandaditostec.Cliente.checkNetworkConnection checkNetworkConnection;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab_pedidos);
+
+        checkNetworkConnection = new checkNetworkConnection(this);
 
         //Inicializa instancia de autentificación de Firebase
         mAuth = FirebaseAuth.getInstance();
@@ -47,34 +53,42 @@ public class TabPedidos extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
+
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
         mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         fabPedido = findViewById(R.id.fabPedido);
-
-        fabPedido.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                abrirDialogo();
-            }
-        });
+        setButtonListener();
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+    }
 
+    private void setButtonListener(){
+        if (checkNetworkConnection.isConnected()){
+            fabPedido.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    abrirDialogo();
+                }
+            });
+        } else {
+            fabPedido.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(TabPedidos.this, "No estas conectado a internet\nIntentalo más tarde.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         //Usuario no logeado regresa a activity de registro
