@@ -96,6 +96,7 @@ public class RegistroMandadero extends AppCompatActivity implements View.OnClick
                             database = FirebaseDatabase.getInstance().getReference().child("Mandadero").child(uid);
 
                             HashMap<String, String> mandadero = new HashMap<>();
+                            mandadero.put("id", uid);
                             mandadero.put("nombre", name);
                             mandadero.put("correo", email);
                             mandadero.put("estado", "disponible");

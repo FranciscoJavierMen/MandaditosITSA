@@ -17,6 +17,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.administrador.mandaditostec.Cliente.Mandaderos.FragmentMandaderos;
 import com.example.administrador.mandaditostec.Cliente.Mapa.Maps;
 import com.example.administrador.mandaditostec.Cliente.checkNetworkConnection;
 import com.example.administrador.mandaditostec.R;
@@ -41,9 +43,12 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
     public static final String TAG = "Nuevo pedido";
     private final static int MAP_POINT1 = 999;
     private final static int MAP_POINT2 = 998;
+    private final static int LISTA_MANDADERO = 978;
     private Toolbar toolbar;
     private String latO, lonO, latD, lonD;
-    
+    private String nombre;
+    private String id;
+
     private FloatingActionButton fabEnviarPedido;
     private AppCompatButton btnMandadero, btnDireccionOrigen, btnDireccionDestino;
     private TextView txtMandadero, txtDireccionOrigen, txtDireccionDestino, txtPrevMandadero,
@@ -65,11 +70,18 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
         setStyle(FormDialog.STYLE_NORMAL, R.style.AppTheme_FullScreenDialog);
         checkNetworkConnection = new checkNetworkConnection(getContext());
 
+        if (getArguments() != null){
+            Bundle args = getArguments();
+            id = args.getString("id");
+            nombre = args.getString("nombre");
+        }
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        Toast.makeText(getContext(), "Id mandadero: "+id, Toast.LENGTH_SHORT).show();
         
         if (checkNetworkConnection.isConnected()){
             Dialog dialog = getDialog();
@@ -117,6 +129,18 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
         txtDireccionOrigen = view.findViewById(R.id.txtDireccionOrigen);
         txtDireccionDestino = view.findViewById(R.id.txtDireccionDestino);
         edtDescripcionPedido = view.findViewById(R.id.edtDescripcionPedido);
+
+        txtMandadero.setText(nombre);
+    }
+
+    private void seleccionarmandadero(){
+        Intent mandaderos = new Intent(getContext(), ListaMandaderos.class);
+        startActivityForResult(mandaderos, LISTA_MANDADERO);
+    }
+
+    private void setMandadero(String id, String nombre){
+        this.id = id;
+        txtMandadero.setText(nombre);
     }
 
     private void seleccionarOrigen(){
@@ -183,12 +207,12 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
         txtPrevOrigen = view.findViewById(R.id.txtPrevOrigen);
         txtPrevDestino = view.findViewById(R.id.txtPrevDestino);
 
-        String mandadero = txtMandadero.getText().toString();
+        //String mandadero = nombre;
         String pedido = edtDescripcionPedido.getText().toString();
         String origen = txtDireccionOrigen.getText().toString();
         String destino = txtDireccionDestino.getText().toString();
 
-        txtPrevMandadero.setText(mandadero);
+        txtPrevMandadero.setText(nombre);
         txtPrevPedido.setText(pedido);
         txtPrevOrigen.setText(origen);
         txtPrevDestino.setText(destino);
@@ -212,6 +236,16 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
                 setDireccionDestino(latLng.latitude, latLng.longitude);
                 latD = String.valueOf(latLng.latitude);
                 lonD = String.valueOf(latLng.longitude);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        if (requestCode == LISTA_MANDADERO){
+            try{
+                String id = data.getStringExtra("id_madadero");
+                String nombre = data.getStringExtra("nombre_mandadero");
+                setMandadero(id, nombre);
             } catch (Exception e){
                 e.printStackTrace();
             }
@@ -240,7 +274,7 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
                     }
                     break;
                 case R.id.btnSeleccionarMandadero:
-                    Toast.makeText(getActivity().getApplicationContext(), "Seleccionar mandadero", Toast.LENGTH_SHORT).show();
+                    seleccionarmandadero();
                     break;
                 case R.id.btnSeleccionarDestino:
                     seleccionarDestino();
@@ -285,6 +319,7 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
             modelo.setLongitudDestino(lonD);
             modelo.setPedido(pedido);
             modelo.setHora(getdateTime());
+            modelo.setIdMandadero(id);
             modelo.setEstado("pendiente");
 
             databaseReference.child("Pedido").child(modelo.getId()).setValue(modelo);

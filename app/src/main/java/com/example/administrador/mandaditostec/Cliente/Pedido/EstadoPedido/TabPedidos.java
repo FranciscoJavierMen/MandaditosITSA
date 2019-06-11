@@ -89,12 +89,6 @@ public class TabPedidos extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-
-        //Usuario no logeado regresa a activity de registro
-        if (currentUser == null){
-            backToWelcome();
-        }
     }
 
     //Método para volver a activitu de logeo y registro
@@ -122,8 +116,8 @@ public class TabPedidos extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            progressDialog.setTitle("Cerrando sesión");
-            progressDialog.setMessage("Saliendo de tu cuenta");
+            progressDialog.setTitle("Cerrar sesión");
+            progressDialog.setMessage("Saliendo de tu cuenta...");
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.show();
             FirebaseAuth.getInstance().signOut();

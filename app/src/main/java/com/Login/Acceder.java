@@ -126,7 +126,6 @@ public class Acceder extends AppCompatActivity implements View.OnClickListener{
                 dialog.dismiss();
                 Intent i = new Intent(getApplicationContext(), RegistroMandadero.class);
                 startActivity(i);
-                finish();
             }
         });
 
@@ -136,7 +135,6 @@ public class Acceder extends AppCompatActivity implements View.OnClickListener{
                 dialog.dismiss();
                 Intent i = new Intent(getApplicationContext(), RegistroCliente.class);
                 startActivity(i);
-                finish();
             }
         });
         dialog.show();

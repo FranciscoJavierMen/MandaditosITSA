@@ -32,7 +32,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".Cliente.BottomNavigation"/>
+        <activity android:name=".Cliente.BottomNavigation" />
         <activity
             android:name=".Cliente.Mapa.Maps"
             android:label="@string/title_activity_maps" />
@@ -44,10 +44,12 @@
             android:label="@string/title_activity_tab_pedidos"
             android:theme="@style/AppTheme" />
         <activity android:name=".Cliente.Pedido.DetallesPedido" />
-        <!--<activity
+        <!--
+            <activity
             android:name="com.Login.Acceder"
             android:label="@string/title_activity_acceder"
-            android:theme="@style/AppTheme" />-->
+            android:theme="@style/AppTheme" />
+        -->
         <activity
             android:name="com.Login.RegistroCliente"
             android:label="@string/title_activity_registro_cliente"
@@ -55,6 +57,10 @@
         <activity
             android:name="com.Login.RegistroMandadero"
             android:label="@string/title_activity_registro_mandadero"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".Cliente.Pedido.ListaMandaderos"
+            android:label="@string/title_activity_lista_mandaderos"
             android:theme="@style/AppTheme"></activity>
     </application>
 

@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.administrador.mandaditostec.Cliente.Pedido.FormDialog;
 import com.example.administrador.mandaditostec.Cliente.checkNetworkConnection;
 import com.example.administrador.mandaditostec.R;
 import com.google.firebase.database.DataSnapshot;
@@ -184,11 +186,18 @@ public class FragmentMandaderos extends Fragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(getContext(), "Mandadero seleccionado: "+modelo.getNombre(), Toast.LENGTH_SHORT).show();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("id", modelo.getId());
+                    bundle.putString("nombre", modelo.getNombre());
+
+                    FragmentManager manager = getFragmentManager();
+                    FormDialog formDialog = new FormDialog();
+                    formDialog.setArguments(bundle);
+                    formDialog.show(manager, "tag");
+                    //abrirDialogo();
                 }
             });
         }
-
 
         @Override
         public int getItemCount() {
@@ -211,6 +220,10 @@ public class FragmentMandaderos extends Fragment {
         }
     }
 
+    //Abre el dialogo con el formulario de pedidos
+    private void abrirDialogo(){
+        FormDialog.display(getFragmentManager());
+    }
 
     @Override
     public void onStart() {
