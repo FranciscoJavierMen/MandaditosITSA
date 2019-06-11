@@ -105,4 +105,5 @@
     <string name="nombre_usuario">Nombre de usuario</string>
     <string name="confirmar_contrasena">Confirmar contraseña</string>
     <string name="con_cuenta">¿Ya tienes una cuenta?</string>
+    <string name="status_mandadero">Status del mandadero</string>
 </resources>

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/coordinatorMandaderos"
     tools:context=".Cliente.Mandaderos.FragmentMandaderos">
 
     <android.support.v4.widget.SwipeRefreshLayout
@@ -18,4 +20,32 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-</FrameLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/imgEmptyMandadero"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/paper"/>
+
+        <TextView
+            android:visibility="gone"
+            android:layout_below="@+id/imgEmptyMandadero"
+            android:id="@+id/textEmptyMandadero"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="italic"
+            android:textColor="@android:color/darker_gray"
+            android:text="@string/sin_pedidos"/>
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>
