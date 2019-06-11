@@ -81,7 +81,7 @@ public class Rechazado extends Fragment {
                     Thread.sleep(1000);
                     refreshPedidos.setRefreshing(false);
                     Snackbar snackbar = Snackbar
-                            .make(coordinatorLayout, "Lista de pedidos pendientes actualizada", Snackbar.LENGTH_LONG);
+                            .make(coordinatorLayout, "Lista de pedidos rechazados actualizada", Snackbar.LENGTH_LONG);
 
                     snackbar.setActionTextColor(Color.YELLOW);
                     snackbar.show();
@@ -107,7 +107,6 @@ public class Rechazado extends Fragment {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Iterator<DataSnapshot> items = dataSnapshot.getChildren().iterator();
                         checkData(dataSnapshot);
-                        Toast.makeText(getActivity(), "No. d epedidos rechazados : " + dataSnapshot.getChildrenCount(), Toast.LENGTH_SHORT).show();
                         pedidos.clear();
                         while (items.hasNext()) {
                             DataSnapshot item = items.next();

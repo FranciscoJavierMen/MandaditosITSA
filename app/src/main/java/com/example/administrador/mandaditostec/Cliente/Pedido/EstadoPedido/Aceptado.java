@@ -77,7 +77,7 @@ public class Aceptado extends Fragment {
                     Thread.sleep(1000);
                     refreshPedidos.setRefreshing(false);
                     Snackbar snackbar = Snackbar
-                            .make(coordinatorLayout, "Lista de pedidos aceptada actualizada", Snackbar.LENGTH_LONG);
+                            .make(coordinatorLayout, "Lista de pedidos aceptados actualizada", Snackbar.LENGTH_LONG);
 
                     snackbar.setActionTextColor(Color.YELLOW);
                     snackbar.show();
@@ -103,7 +103,6 @@ public class Aceptado extends Fragment {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Iterator<DataSnapshot> items = dataSnapshot.getChildren().iterator();
                         checkData(dataSnapshot);
-                        Toast.makeText(getActivity(), "No. de pedidos aceptados : " + dataSnapshot.getChildrenCount(), Toast.LENGTH_SHORT).show();
                         pedidos.clear();
                         while (items.hasNext()) {
                             DataSnapshot item = items.next();

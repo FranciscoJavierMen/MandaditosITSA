@@ -7,7 +7,23 @@
     android:id="@+id/coordinatorMandaderos"
     tools:context=".Cliente.Mandaderos.FragmentMandaderos">
 
+    <LinearLayout
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="55dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/lista_mandaderos"
+            android:textSize="18sp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:textColor="@color/blanco"/>
+    </LinearLayout>
+
     <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_marginTop="55dp"
         android:id="@+id/refreshMandaderos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -107,4 +107,5 @@
     <string name="con_cuenta">¿Ya tienes una cuenta?</string>
     <string name="status_mandadero">Status del mandadero</string>
     <string name="title_activity_lista_mandaderos">ListaMandaderos</string>
+    <string name="lista_mandaderos">Lista de mandaderos</string>
 </resources>

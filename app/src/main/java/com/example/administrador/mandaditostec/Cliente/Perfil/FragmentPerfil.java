@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
@@ -13,12 +15,10 @@ import android.view.ViewGroup;
 import com.example.administrador.mandaditostec.R;
 
 public class FragmentPerfil extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -30,7 +30,6 @@ public class FragmentPerfil extends Fragment {
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
     public static FragmentPerfil newInstance(String param1, String param2) {
         FragmentPerfil fragment = new FragmentPerfil();
         Bundle args = new Bundle();
@@ -65,6 +64,7 @@ public class FragmentPerfil extends Fragment {
         return  view;
     }
 
+
     protected void showDialog(){
 
         final Dialog dialog = new Dialog(getActivity());
@@ -86,7 +86,6 @@ public class FragmentPerfil extends Fragment {
         dialog.show();
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -111,7 +110,6 @@ public class FragmentPerfil extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }

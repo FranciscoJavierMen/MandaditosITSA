@@ -194,7 +194,6 @@ public class FragmentMandaderos extends Fragment {
                     FormDialog formDialog = new FormDialog();
                     formDialog.setArguments(bundle);
                     formDialog.show(manager, "tag");
-                    //abrirDialogo();
                 }
             });
         }

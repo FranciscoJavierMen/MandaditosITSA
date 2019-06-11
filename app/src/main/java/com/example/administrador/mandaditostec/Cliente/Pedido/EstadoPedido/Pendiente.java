@@ -112,7 +112,6 @@ public class Pendiente extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterator<DataSnapshot> items = dataSnapshot.getChildren().iterator();
                 checkData(dataSnapshot);
-                //Toast.makeText(getActivity(), "No. de pedidos pendientes: " + dataSnapshot.getChildrenCount(), Toast.LENGTH_SHORT).show();
                 pedidos.clear();
                 while (items.hasNext()) {
                     DataSnapshot item = items.next();

@@ -47,7 +47,7 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
     private Toolbar toolbar;
     private String latO, lonO, latD, lonD;
     private String nombre;
-    private String id;
+    private String idMandadero;
 
     private FloatingActionButton fabEnviarPedido;
     private AppCompatButton btnMandadero, btnDireccionOrigen, btnDireccionDestino;
@@ -72,7 +72,7 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
 
         if (getArguments() != null){
             Bundle args = getArguments();
-            id = args.getString("id");
+            idMandadero = args.getString("id");
             nombre = args.getString("nombre");
         }
 
@@ -81,8 +81,6 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
     @Override
     public void onStart() {
         super.onStart();
-        Toast.makeText(getContext(), "Id mandadero: "+id, Toast.LENGTH_SHORT).show();
-        
         if (checkNetworkConnection.isConnected()){
             Dialog dialog = getDialog();
             if (dialog != null) {
@@ -114,12 +112,14 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
         return view;
     }
 
+    //Inicializa Firebase
     private void inicializarFirebase(){
         FirebaseApp.initializeApp(getActivity().getApplicationContext());
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
     }
 
+    //Inicializa los componentes
     private void inicializar(View view) {
         fabEnviarPedido = view.findViewById(R.id.fabEnviarPedido);
         btnMandadero = view.findViewById(R.id.btnSeleccionarMandadero);
@@ -133,13 +133,15 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
         txtMandadero.setText(nombre);
     }
 
+    //Abre lista de mandaderos disponibles
     private void seleccionarmandadero(){
         Intent mandaderos = new Intent(getContext(), ListaMandaderos.class);
         startActivityForResult(mandaderos, LISTA_MANDADERO);
     }
 
+    //Establece los valores del mandadero seleccionado
     private void setMandadero(String id, String nombre){
-        this.id = id;
+        idMandadero = id;
         txtMandadero.setText(nombre);
     }
 
@@ -243,8 +245,8 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
 
         if (requestCode == LISTA_MANDADERO){
             try{
-                String id = data.getStringExtra("id_madadero");
-                String nombre = data.getStringExtra("nombre_mandadero");
+                String id = data.getStringExtra("id_mandadero");
+                nombre = data.getStringExtra("nombre_mandadero");
                 setMandadero(id, nombre);
             } catch (Exception e){
                 e.printStackTrace();
@@ -319,7 +321,7 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
             modelo.setLongitudDestino(lonD);
             modelo.setPedido(pedido);
             modelo.setHora(getdateTime());
-            modelo.setIdMandadero(id);
+            modelo.setIdMandadero(idMandadero);
             modelo.setEstado("pendiente");
 
             databaseReference.child("Pedido").child(modelo.getId()).setValue(modelo);
@@ -389,7 +391,7 @@ public class FormDialog extends DialogFragment implements View.OnClickListener{
         direccionOrigen = txtDireccionOrigen.getText().toString();
         direccionDestino = txtDireccionDestino.getText().toString();
 
-        if (pedido.equals("") || mandadero.equals("AMandadero no seleccionado") 
+        if (pedido.equals("") || mandadero.equals(" ")
                 || direccionOrigen.equals("Dirección no seleccionada") 
                 || direccionDestino.equals("Dirección no seleccionada")){
             validar = false;
