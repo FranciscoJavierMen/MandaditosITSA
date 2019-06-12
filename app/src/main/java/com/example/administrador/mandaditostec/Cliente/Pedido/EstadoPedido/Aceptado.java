@@ -138,7 +138,6 @@ public class Aceptado extends Fragment {
                 });
     }
 
-
     private class pedidosAdapter extends RecyclerView.Adapter<pedidosAdapter.RecViewHolder> {
 
 

@@ -108,4 +108,7 @@
     <string name="status_mandadero">Status del mandadero</string>
     <string name="title_activity_lista_mandaderos">ListaMandaderos</string>
     <string name="lista_mandaderos">Lista de mandaderos</string>
+    <string name="numero_pedidos_total">Número de pedidos realizados</string>
+    <string name="pedido_pendiente">Pedido pendiente</string>
+    <string name="estadisticas">Tus estadísticas</string>
 </resources>
