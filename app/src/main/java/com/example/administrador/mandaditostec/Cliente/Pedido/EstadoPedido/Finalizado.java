@@ -127,6 +127,8 @@ public class Finalizado extends Fragment {
                             }
 
                         }
+
+                        checkList(pedidos);
                         recyclerPedidos.setAdapter(new pedidosAdapter(pedidos));
                         recyclerPedidos.getAdapter().notifyDataSetChanged();
                         databaseReference.child("Pedido").removeEventListener(this);
@@ -140,33 +142,6 @@ public class Finalizado extends Fragment {
                 });
     }
 
-    private void pedidosObjetos(){
-        databaseReference.child("Pedido").orderByChild("estado").equalTo("finalizado")
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Iterator<DataSnapshot> items = dataSnapshot.getChildren().iterator();
-                        checkData(dataSnapshot);
-                        pedidos.clear();
-                        while (items.hasNext()) {
-                            DataSnapshot item = items.next();
-                            ModeloPedidos pedido = item.getValue(ModeloPedidos.class);
-                            pedidos.add(pedido);
-
-                        }
-
-                        recyclerPedidos.setAdapter(new pedidosAdapter(pedidos));
-                        recyclerPedidos.getAdapter().notifyDataSetChanged();
-                        databaseReference.child("Pedido").orderByChild("estado").equalTo("aceptado").removeEventListener(this);
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-    }
 
     private class pedidosAdapter extends RecyclerView.Adapter<pedidosAdapter.RecViewHolder> {
 
@@ -254,6 +229,14 @@ public class Finalizado extends Fragment {
             recyclerPedidos.setVisibility(View.VISIBLE);
             avion.setVisibility(View.GONE);
             textEmpty.setVisibility(View.GONE);
+        }
+    }
+
+    private void checkList(ArrayList arrayList){
+        if (arrayList.size() < 1){
+            recyclerPedidos.setVisibility(View.GONE);
+            avion.setVisibility(View.VISIBLE);
+            textEmpty.setVisibility(View.VISIBLE);
         }
     }
 
