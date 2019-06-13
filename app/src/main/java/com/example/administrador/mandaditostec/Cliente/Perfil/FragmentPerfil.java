@@ -84,7 +84,6 @@ public class FragmentPerfil extends Fragment {
 
         init(view);
 
-        showEstadisticas();
         return  view;
     }
 
@@ -107,8 +106,27 @@ public class FragmentPerfil extends Fragment {
 
     }
 
+    private void datosUsuario(){
+        databaseReference.child("Cliente").child(idCliente).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String nombre = dataSnapshot.child("nombre").getValue().toString();
+                String correo = dataSnapshot.child("correo").getValue().toString();
+
+                txtCorreo.setText(correo);
+                txtNombre.setText(nombre);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     private void showEstadisticas(){
         try{
+            datosUsuario();
             pedidosTotales();
             pedidosAceptados();
             pedidosPendientes();
@@ -140,6 +158,7 @@ public class FragmentPerfil extends Fragment {
                         } else {
                             total = ""+pedidos.size();
                         }
+                        txtTotal.setText(total);
                         databaseReference.child("Pedido").removeEventListener(this);
                     }
 
@@ -173,6 +192,7 @@ public class FragmentPerfil extends Fragment {
                         } else {
                             pendiente = ""+pedidos.size();
                         }
+                        txtPendiente.setText(pendiente);
                         databaseReference.child("Pedido").removeEventListener(this);
                     }
 
@@ -206,6 +226,7 @@ public class FragmentPerfil extends Fragment {
                         } else {
                             aceptado = ""+pedidos.size();
                         }
+                        txtAceptado.setText(aceptado);
                         databaseReference.child("Pedido").removeEventListener(this);
                     }
 
@@ -239,6 +260,7 @@ public class FragmentPerfil extends Fragment {
                         } else {
                             rechazado = ""+pedidos.size();
                         }
+                        txtRechazado.setText(rechazado);
                         databaseReference.child("Pedido").removeEventListener(this);
                     }
 
@@ -272,6 +294,7 @@ public class FragmentPerfil extends Fragment {
                         } else {
                             finalizado = ""+pedidos.size();
                         }
+                        txtFinalizado.setText(finalizado);
                         databaseReference.child("Pedido").removeEventListener(this);
                     }
 
