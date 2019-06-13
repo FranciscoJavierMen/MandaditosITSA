@@ -179,8 +179,9 @@ public class Pendiente extends Fragment {
                     final String fecha = modelo.getHora();
                     final String mandadero = modelo.getMandadero();
                     final String lat = modelo.getLatitudDestino();
-                    final String  lon = modelo.getLongitudDestino();
+                    final String lon = modelo.getLongitudDestino();
                     final String estado = modelo.getEstado();
+                    final String idMandadero = modelo.getIdMandadero();
 
                     final double latDes = Double.valueOf(lat);
                     final double lonDes = Double.valueOf(lon);
@@ -195,6 +196,7 @@ public class Pendiente extends Fragment {
                     i.putExtra("direccion", setDireccion(latDes, lonDes));
                     i.putExtra("longitud", lonDes);
                     i.putExtra("latitud", latDes);
+                    i.putExtra("idMandadero", idMandadero);
 
                     startActivity(i);
                 }

@@ -111,4 +111,6 @@
     <string name="numero_pedidos_total">Número de pedidos realizados</string>
     <string name="pedido_pendiente">Pedido pendiente</string>
     <string name="estadisticas">Tus estadísticas</string>
+    <string name="title_activity_chat">Chat</string>
+    <string name="escrie_un_mensaje">Escrie un mensaje</string>
 </resources>

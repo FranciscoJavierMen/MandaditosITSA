@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,12 +43,13 @@ public class DetallesPedido extends AppCompatActivity implements View.OnClickLis
     private TextView txtPedido, txtDireccion, txtFecha, txtMandadero, txtEstado;
     private FloatingActionButton fabEstado, fabMapa, fabRecepcion;
     private AppCompatButton btnConfirmar;
+    private CardView cardChat;
 
     //Firebase
     private DatabaseReference databaseReference;
 
     //Variables para recepción de datos
-    private String id, pedido, fecha, mandadero, direccion, estado;
+    private String id, idMandadero, pedido, fecha, mandadero, direccion, estado;
     private double lat, lon;
 
 
@@ -59,7 +61,6 @@ public class DetallesPedido extends AppCompatActivity implements View.OnClickLis
         toolbar.setTitle(TAG);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         setSupportActionBar(toolbar);
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,6 +71,7 @@ public class DetallesPedido extends AppCompatActivity implements View.OnClickLis
         try{
             Intent i = getIntent();
             id = i.getStringExtra("id");
+            idMandadero = i.getStringExtra("idMandadero");
             pedido = i.getStringExtra("pedido");
             fecha = i.getStringExtra("fecha");
             mandadero = i.getStringExtra("mandadero");
@@ -102,6 +104,16 @@ public class DetallesPedido extends AppCompatActivity implements View.OnClickLis
         fabMapa = findViewById(R.id.fabMapaDestino);
         fabRecepcion = findViewById(R.id.fabRecepcion);
         btnConfirmar = findViewById(R.id.btnConfirmarRecepcion);
+        cardChat = findViewById(R.id.cardChat);
+
+        cardChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent chat = new Intent(DetallesPedido.this, Chat.class);
+                chat.putExtra("idMandadero", idMandadero);
+                startActivity(chat);
+            }
+        });
     }
 
     //establecer los valores

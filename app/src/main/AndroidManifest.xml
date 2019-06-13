@@ -61,6 +61,10 @@
         <activity
             android:name=".Cliente.Pedido.ListaMandaderos"
             android:label="@string/title_activity_lista_mandaderos"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".Cliente.Pedido.Chat"
+            android:label="@string/title_activity_chat"
             android:theme="@style/AppTheme"></activity>
     </application>
 
