@@ -112,5 +112,6 @@
     <string name="pedido_pendiente">Pedido pendiente</string>
     <string name="estadisticas">Tus estadísticas</string>
     <string name="title_activity_chat">Chat</string>
-    <string name="escrie_un_mensaje">Escrie un mensaje</string>
+    <string name="escrie_un_mensaje">Escribe un mensaje</string>
+    <string name="mensaje_prueba">Este es un mensaje de prueba</string>
 </resources>

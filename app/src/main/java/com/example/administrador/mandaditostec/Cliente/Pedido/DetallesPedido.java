@@ -111,6 +111,7 @@ public class DetallesPedido extends AppCompatActivity implements View.OnClickLis
             public void onClick(View view) {
                 Intent chat = new Intent(DetallesPedido.this, Chat.class);
                 chat.putExtra("idMandadero", idMandadero);
+                chat.putExtra("nombreMandadero", mandadero);
                 startActivity(chat);
             }
         });

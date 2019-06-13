@@ -7,16 +7,21 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.administrador.mandaditostec.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,7 +29,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Chat extends AppCompatActivity {
@@ -34,6 +41,9 @@ public class Chat extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private String current_user;
     private EditText edtmensaje;
+    private final List<Mensajes> listaMensajes = new ArrayList<>();;
+    private AdaptadorMensajes adapter;
+    private RecyclerView recyclerMensajes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,23 +59,32 @@ public class Chat extends AppCompatActivity {
         try{
             Intent intent = getIntent();
             idMandadero = intent.getStringExtra("idMandadero");
-            nombreMandadero = intent.getStringExtra("mandadero");
+            nombreMandadero = intent.getStringExtra("nombreMandadero");
+
+            Toolbar toolbar = findViewById(R.id.toolbar);
+            toolbar.setTitle(nombreMandadero);
+            setSupportActionBar(toolbar);
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
+                }
+            });
         } catch (Exception e){
             e.printStackTrace();
         }
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle(nombreMandadero);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-
         edtmensaje = findViewById(R.id.edtMensaje);
+        recyclerMensajes = findViewById(R.id.recyclerMensajes);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+
+        recyclerMensajes.setHasFixedSize(true);
+        recyclerMensajes.setLayoutManager(linearLayoutManager);
+
+        cargarMensajes();
+        adapter = new AdaptadorMensajes(listaMensajes);
+        recyclerMensajes.setAdapter(adapter);
         setChat();
 
         FloatingActionButton fab = findViewById(R.id.fabSendMessage);
@@ -73,9 +92,40 @@ public class Chat extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 enviarMensaje();
-                edtmensaje.setText("");
             }
         });
+    }
+
+    private void cargarMensajes() {
+        databaseReference.child("mensajes").child(current_user).child(idMandadero)
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        Mensajes msj = dataSnapshot.getValue(Mensajes.class);
+                        listaMensajes.add(msj);
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     private void setChat(){
@@ -122,9 +172,12 @@ public class Chat extends AppCompatActivity {
             String push_id = user_message_push.getKey();
 
             Map messageMap = new HashMap();
-            messageMap.put("mensaje", mensaje);
+            messageMap.put("message", mensaje);
             messageMap.put("type", "text");
             messageMap.put("time", ServerValue.TIMESTAMP);
+            messageMap.put("from", current_user);
+
+            edtmensaje.setText("");
 
             Map messageUserMap = new HashMap();
             messageUserMap.put(current_user_ref + "/" + push_id, messageMap);
