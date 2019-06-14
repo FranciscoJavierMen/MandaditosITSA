@@ -143,6 +143,12 @@ public class DetallesPedido extends AppCompatActivity implements View.OnClickLis
                 break;
             case "finalizado":
                 txtEstado.setText("El pedido ya ha te ha sido entregado");
+                cardChat.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(DetallesPedido.this, "El pedido ya terminó, ya no puedes enviar mensajes", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 fabEstado.setImageResource(R.drawable.ic_gift);
                 fabRecepcion.setImageResource(R.drawable.ic_gift);
                 fabEstado.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.verde)));
@@ -151,6 +157,12 @@ public class DetallesPedido extends AppCompatActivity implements View.OnClickLis
                 btnConfirmar.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_boton_recibido));
                 break;
             case "rechazado":
+                cardChat.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(DetallesPedido.this, "El pedido ya terminó, ya no puedes enviar mensajes", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 txtEstado.setText("El pedido ha sido rechazado por el mandadero");
                 fabEstado.setImageResource(R.drawable.ic_close_white);
                 fabEstado.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.escarlata)));
