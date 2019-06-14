@@ -15,7 +15,7 @@
     </string>
     <string name="title_activity_bottom_navigation">BottomNavigation</string>
     <string name="title_mandaderos">Mandaderos</string>
-    <string name="title_pedidos">Pedidos</string>
+    <string name="title_inicio">Inicio</string>
     <string name="title_perfil">Perfil</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -37,7 +37,9 @@
     <string name="pedido_cancelado">Pedido cancelado</string>
     <string name="mensaje_cancelado">Tu pedido ha sido cancelado. Puedes volver y crear un nuevo pedido cuando quieras.</string>
     <string name="enviar_pedido">Enviar pedido</string>
-    <string name="mensaje_pregunta">Acabas de crear un pedido, pulsa en Ok para confirmar los datos y enviar tu pedido, o pulsa Cancelar para cancelar el pedido.</string>
+    <string name="mensaje_pregunta">
+        Acabas de crear un pedido, pulsa en Aceptar para confirmar los datos y
+        enviar tu pedido, o pulsa "Seguir editando" para editar el pedido.</string>
     <string name="cancelar">Cancelar</string>
     <string name="aceptar">Aceptar</string>
     <string name="title_activity_detalles_pedido">DetallesPedido</string>
@@ -70,4 +72,46 @@
     <string name="chat">Chat</string>
     <string name="nuevo_chat">Comenzar un nuevo chat</string>
     <string name="pedido_aceptado">Aceptado y en camino</string>
+    <string name="cerca_de">Ubicación seleccionada cerca de:</string>
+    <string name="confirmar_recepcion_pedido">Estas seguro que deseas confirmar la recepción de tu pedido? Si lo haces estás aceptando que el madadero ha entregado correctamente tu pedido al domicilo que especificaste, después de esto el mandadero se desblinda de cualquier responsabilidad sobre el pedido.</string>
+    <string name="title_activity_mapa_destino">Map</string>
+    <string name="notaMapa2">La dirección que se muestra en el marcador es la ubicación seleccionada como destino de entrega del pedido, el mandadero deberá entregar el pedido en esta dirección.</string>
+    <string name="title_activity_tab_pedidos">TabPedidos</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="tab_text_1">Pendientes</string>
+    <string name="tab_text_2">Aceptados</string>
+    <string name="tab_text_3">Finalizados</string>
+    <string name="tab_text_4">Rechazados</string>
+    <string name="descubre">Descubre todas las opciones que ofrece Mandaditos App, seguro que muchas de ellas te serán de utilidad al momento de realizar un pedido de mandado.</string>
+    <string name="acceder_lista_pedidos">Accede a tus listas de pedidos o realiza un nuevo pedido. Accede a tu lista de pedidos pendientes, pedidos aceptados, pedidos realizados y pedidos rechazados. Además accede al formulario para crear un nuevo pedido</string>
+    <string name="sin_pedidos">Aún no hay pedidos aquí</string>
+    <string name="seguir_editando">Seguir editando</string>
+    <string name="confirmar_datos">Confirma los datos</string>
+    <string name="title_activity_acceder">Acceder</string>
+    <string name="correo">Correo electrónico</string>
+    <string name="contrasena">Contraseña</string>
+    <string name="acceder">Acceder</string>
+    <string name="sin_cuenta">¿Aún no tienes cuenta?</string>
+    <string name="crear_cuenta">Crear cuenta</string>
+    <string name="tipo_cuenta">Seleccione el tipo de cuenta</string>
+    <string name="nota_cuenta">
+        Seleccione el tipo de cuenta según sus necesidades.\n\nSi desea utilizar
+        la aplicación para ofrecer un servicio de mandados cree una cuenta de Mandadero. Si lo que
+        desea es realizar pedidos mediante la aplicación cree una cuenta de Cliente.
+    </string>
+    <string name="cliente">Cliente</string>
+    <string name="title_activity_registro_cliente">RegistroCliente</string>
+    <string name="title_activity_registro_mandadero">RegistroMandadero</string>
+    <string name="nombre_usuario">Nombre de usuario</string>
+    <string name="confirmar_contrasena">Confirmar contraseña</string>
+    <string name="con_cuenta">¿Ya tienes una cuenta?</string>
+    <string name="status_mandadero">Status del mandadero</string>
+    <string name="title_activity_lista_mandaderos">ListaMandaderos</string>
+    <string name="lista_mandaderos">Lista de mandaderos</string>
+    <string name="numero_pedidos_total">Número de pedidos realizados</string>
+    <string name="pedido_pendiente">Pedido pendiente</string>
+    <string name="estadisticas">Tus estadísticas</string>
+    <string name="title_activity_chat">Chat</string>
+    <string name="escrie_un_mensaje">Escribe un mensaje</string>
+    <string name="mensaje_prueba">Este es un mensaje de prueba</string>
 </resources>

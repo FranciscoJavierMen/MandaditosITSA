@@ -2,51 +2,59 @@ package com.example.administrador.mandaditostec.Cliente.Perfil;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.Login.Acceder;
+import com.example.administrador.mandaditostec.Cliente.Pedido.ModeloPedidos;
 import com.example.administrador.mandaditostec.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link FragmentPerfil.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link FragmentPerfil#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.Iterator;
+
 public class FragmentPerfil extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
+    //Firebase
+    private DatabaseReference databaseReference;
+    private FirebaseAuth mAuth;
+    private String idCliente;
+    private String total, pendiente, aceptado, rechazado, finalizado;
+
     private AppCompatButton btnCerrarSesion;
+    private TextView txtNombre, txtCorreo, txtTotal, txtPendiente, txtAceptado, txtFinalizado, txtRechazado;
+    private ArrayList<ModeloPedidos> pedidos = new ArrayList<>();
+
 
     public FragmentPerfil() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentPerfil.
-     */
-    // TODO: Rename and change types and number of parameters
     public static FragmentPerfil newInstance(String param1, String param2) {
         FragmentPerfil fragment = new FragmentPerfil();
         Bundle args = new Bundle();
@@ -59,9 +67,11 @@ public class FragmentPerfil extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+        if (current_user != null) {
+            idCliente = current_user.getUid();
         }
     }
 
@@ -70,7 +80,23 @@ public class FragmentPerfil extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_perfil, container, false);
-        btnCerrarSesion = view.findViewById(R.id.btnCerrarSesion);
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        init(view);
+
+        return  view;
+    }
+
+    private void init(View v){
+        txtTotal = v.findViewById(R.id.txtPedidosTotal);
+        txtNombre =v.findViewById(R.id.txtNombreClienteP);
+        txtCorreo = v.findViewById(R.id.txtCorreoClienteP);
+        txtPendiente = v.findViewById(R.id.txtPedidosPendientes);
+        txtAceptado = v.findViewById(R.id.txtPedidosAceptados);
+        txtRechazado = v.findViewById(R.id.txtPedidosRechazados);
+        txtFinalizado = v.findViewById(R.id.txtPedidosFinalizados);
+
+        btnCerrarSesion = v.findViewById(R.id.btnCerrarSesion);
         btnCerrarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,7 +104,212 @@ public class FragmentPerfil extends Fragment {
             }
         });
 
-        return  view;
+    }
+
+    private void datosUsuario(){
+        databaseReference.child("Cliente").child(idCliente).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String nombre = dataSnapshot.child("nombre").getValue().toString();
+                String correo = dataSnapshot.child("correo").getValue().toString();
+
+                txtCorreo.setText(correo);
+                txtNombre.setText(nombre);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void showEstadisticas(){
+        try{
+            datosUsuario();
+            pedidosTotales();
+            pedidosAceptados();
+            pedidosPendientes();
+            pedidosRechazados();
+            pedidosFinalizados();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private void pedidosTotales(){
+        databaseReference.child("Pedido")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Iterator<DataSnapshot> items = dataSnapshot.getChildren().iterator();
+                        pedidos.clear();
+                        while (items.hasNext()) {
+                            DataSnapshot item = items.next();
+                            ModeloPedidos pedido = item.getValue(ModeloPedidos.class);
+
+                            if (pedido.getIdCliente().equals(idCliente)){
+                                pedidos.add(pedido);
+                            }
+
+                        }
+                        if (pedidos.size() < 1){
+                            total = "0";
+                        } else {
+                            total = ""+pedidos.size();
+                        }
+                        txtTotal.setText(total);
+                        databaseReference.child("Pedido").removeEventListener(this);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+        txtTotal.setText(total);
+    }
+
+    private void pedidosPendientes(){
+        databaseReference.child("Pedido")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Iterator<DataSnapshot> items = dataSnapshot.getChildren().iterator();
+                        pedidos.clear();
+                        while (items.hasNext()) {
+                            DataSnapshot item = items.next();
+                            ModeloPedidos pedido = item.getValue(ModeloPedidos.class);
+
+                            if (pedido.getIdCliente().equals(idCliente) &&
+                                    pedido.getEstado().equals("pendiente")){
+                                pedidos.add(pedido);
+                            }
+
+                        }
+                        if (pedidos.size() < 1){
+                            pendiente = "0";
+                        } else {
+                            pendiente = ""+pedidos.size();
+                        }
+                        txtPendiente.setText(pendiente);
+                        databaseReference.child("Pedido").removeEventListener(this);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+        txtPendiente.setText(pendiente);
+    }
+
+    private void pedidosAceptados(){
+        databaseReference.child("Pedido")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Iterator<DataSnapshot> items = dataSnapshot.getChildren().iterator();
+                        pedidos.clear();
+                        while (items.hasNext()) {
+                            DataSnapshot item = items.next();
+                            ModeloPedidos pedido = item.getValue(ModeloPedidos.class);
+
+                            if (pedido.getIdCliente().equals(idCliente) &&
+                                    pedido.getEstado().equals("aceptado")){
+                                pedidos.add(pedido);
+                            }
+
+                        }
+                        if (pedidos.size() < 1){
+                            aceptado = "0";
+                        } else {
+                            aceptado = ""+pedidos.size();
+                        }
+                        txtAceptado.setText(aceptado);
+                        databaseReference.child("Pedido").removeEventListener(this);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+        txtAceptado.setText(aceptado);
+    }
+
+    private void pedidosRechazados(){
+        databaseReference.child("Pedido")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Iterator<DataSnapshot> items = dataSnapshot.getChildren().iterator();
+                        pedidos.clear();
+                        while (items.hasNext()) {
+                            DataSnapshot item = items.next();
+                            ModeloPedidos pedido = item.getValue(ModeloPedidos.class);
+
+                            if (pedido.getIdCliente().equals(idCliente) &&
+                                    pedido.getEstado().equals("rechazado")){
+                                pedidos.add(pedido);
+                            }
+
+                        }
+                        if (pedidos.size() < 1){
+                            rechazado = "0";
+                        } else {
+                            rechazado = ""+pedidos.size();
+                        }
+                        txtRechazado.setText(rechazado);
+                        databaseReference.child("Pedido").removeEventListener(this);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+        txtRechazado.setText(rechazado);
+    }
+
+    private void pedidosFinalizados(){
+        databaseReference.child("Pedido")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Iterator<DataSnapshot> items = dataSnapshot.getChildren().iterator();
+                        pedidos.clear();
+                        while (items.hasNext()) {
+                            DataSnapshot item = items.next();
+                            ModeloPedidos pedido = item.getValue(ModeloPedidos.class);
+
+                            if (pedido.getIdCliente().equals(idCliente) &&
+                                    pedido.getEstado().equals("finalizado")){
+                                pedidos.add(pedido);
+                            }
+
+                        }
+                        if (pedidos.size() < 1){
+                            finalizado = "0";
+                        } else {
+                            finalizado = ""+pedidos.size();
+                        }
+                        txtFinalizado.setText(finalizado);
+                        databaseReference.child("Pedido").removeEventListener(this);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+        txtFinalizado.setText(finalizado);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        showEstadisticas();
     }
 
     protected void showDialog(){
@@ -98,11 +329,26 @@ public class FragmentPerfil extends Fragment {
                 dialog.dismiss();
             }
         });
+        btnAceptar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                backToWelcome();
+            }
+        });
 
         dialog.show();
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+    //Método para volver a activitu de logeo y registro
+    private void backToWelcome() {
+        Intent start = new Intent(getContext(), Acceder.class);
+        startActivity(start);
+        getActivity().finish();
+    }
+
+
+
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -126,18 +372,7 @@ public class FragmentPerfil extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }

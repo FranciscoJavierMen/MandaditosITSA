@@ -40,6 +40,7 @@
                         app:layout_anchorGravity="center" />
 
                     <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/fabRecepcion"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:focusable="true"
@@ -109,19 +110,23 @@
                             android:textStyle="bold"
                             android:textColor="@android:color/black"
                             android:background="@null"
-                            android:text="@string/nombreMandadero" />
+                            android:text="@string/descripcionPedido" />
 
                     </RelativeLayout>
 
                     <TextView
+                        android:id="@+id/textFecha"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="60dp"
+                        android:layout_marginBottom="15dp"
+                        android:textSize="12sp"
                         android:textStyle="italic"
                         android:textColor="@color/azul"
                         android:text="@string/fecha_pedido"/>
 
                     <TextView
+                        android:id="@+id/textPedido"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="60dp"
@@ -129,6 +134,8 @@
                         android:textStyle="normal"
                         android:textAlignment="textStart"
                         android:textColor="@color/negro"
+                        android:lineSpacingExtra="1dp"
+                        android:textSize="16sp"
                         android:text="@string/large_text"/>
 
                 </LinearLayout>
@@ -169,7 +176,7 @@
                             android:layout_height="wrap_content">
 
                             <TextView
-                                android:id="@+id/linear2"
+                                android:id="@+id/textDireccion"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="25dp"
@@ -191,8 +198,9 @@
                     </LinearLayout>
 
                     <android.support.design.widget.FloatingActionButton
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:id="@+id/fabMapaDestino"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
                         android:focusable="true"
                         android:src="@drawable/ic_arrow_right"
                         android:tint="@color/azulObscuro"
@@ -258,13 +266,13 @@
                             </FrameLayout>
 
                             <LinearLayout
-                                android:layout_weight="1.5"
+                                android:layout_weight="1"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:orientation="vertical">
 
                                 <TextView
-                                    android:id="@+id/txtNombreMandaderoDetalles"
+                                    android:id="@+id/textMandadero"
                                     android:maxLines="1"
                                     android:layout_marginTop="10dp"
                                     android:layout_width="match_parent"
@@ -290,6 +298,7 @@
                     </android.support.v7.widget.CardView>
 
                     <android.support.v7.widget.CardView
+                        android:id="@+id/cardChat"
                         app:cardBackgroundColor="@color/azulClaro"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
@@ -405,7 +414,7 @@
                             android:paddingBottom="30dp">
 
                             <TextView
-                                android:id="@+id/txtEstadoPedido"
+                                android:id="@+id/textEstado"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
@@ -421,10 +430,11 @@
                     </LinearLayout>
 
                     <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/fabEstado"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:focusable="true"
-                        android:src="@drawable/ic_done"
+                        android:src="@drawable/ic_motorcycle"
                         android:tint="@color/blanco"
                         app:backgroundTint="@color/verde"
                         app:layout_anchor="@+id/linear3"

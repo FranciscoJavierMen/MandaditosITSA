@@ -2,9 +2,14 @@ package com.example.administrador.mandaditostec.Cliente.Mapa;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -24,17 +29,24 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 import static android.content.ContentValues.TAG;
 
-public class Maps extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener {
+public class Maps extends FragmentActivity implements
+        OnMapReadyCallback, View.OnClickListener {
 
     private GoogleMap mMap;
+    private UiSettings mUiSettings;
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private Boolean mLocationPermissionGranted = false;
@@ -43,7 +55,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, View.O
 
     private TextView txtDireccion;
 
-    private FloatingActionButton fabUbicacion, fabSeleccionar;
+    private FloatingActionButton fabUbicacion, fabSeleccionar, fabCancelUbicacion;
     private RelativeLayout relativeLayout, info;
 
     @Override
@@ -59,12 +71,20 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, View.O
         relativeLayout = findViewById(R.id.relLayout2);
         info = findViewById(R.id.relLayout1);
 
-        getLocationPermission();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
+        } else {
+            getLocationPermission();
+        }
 
         fabUbicacion = findViewById(R.id.fabUbicacion);
         fabSeleccionar = findViewById(R.id.fabSeleccionarUbicacion);
+        fabCancelUbicacion = findViewById(R.id.fabCancelUbicacion);
 
         fabUbicacion.setOnClickListener(this);
+        fabCancelUbicacion.setOnClickListener(this);
     }
 
     private void detallesUbicacion(LatLng point){
@@ -110,6 +130,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, View.O
 
     //Seleccionar la ubicación actual del dispositivo
     private void seleccionarUbicacion(){
+        mMap.clear();
         Log.d(TAG, "Obtiener localización del dispositivo");
         FusedLocationProviderClient mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
         try{
@@ -138,16 +159,24 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, View.O
                             mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                                 @Override
                                 public void onInfoWindowClick(Marker marker) {
+                                    mMap.clear();
                                     relativeLayout.setVisibility(View.VISIBLE);
                                     info.setVisibility(View.GONE);
                                     fabUbicacion.setVisibility(View.GONE);
-                                    txtDireccion.setText("Longitud: "+point.longitude+"\nLatitud: "+point.longitude);
+                                    fabSeleccionar.setVisibility(View.VISIBLE);
+                                    fabCancelUbicacion.setVisibility(View.VISIBLE);
                                     fabSeleccionar.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
                                             detallesUbicacion(point);
                                         }
                                     });
+
+                                    try {
+                                        hereLocation(point.latitude, point.longitude);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             });
 
@@ -160,6 +189,29 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, View.O
         }catch(SecurityException se){
             Log.e(TAG, "Obtener posición del dispositivo Esception: "+ se.getMessage());
 
+        }
+    }
+
+    //Método alternativo para obrener nombre de la localidad
+    private void hereLocation(double lat, double lon){
+        String cityName = "";
+        String addresName = "";
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        List<Address> addresses;
+        try{
+            addresses = geocoder.getFromLocation(lat, lon, 10);
+            if (addresses.size() > 0){
+                for (Address adr: addresses){
+                    if (adr.getLocality() != null && adr.getLocality().length() > 0){
+                        cityName = adr.getLocality();
+                        addresName = adr.getAddressLine(0);
+                        txtDireccion.setText(addresName+""+cityName);
+                        break;
+                    }
+                }
+            }
+        }catch (IOException e){
+            e.printStackTrace();
         }
     }
 
@@ -214,6 +266,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, View.O
             }
         }
     }
+
     //Método para selccionar un lugar en el mapa
     private void miUbicacion(){
 
@@ -222,7 +275,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, View.O
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(final LatLng point) {
-
+                mMap.clear();
                 markerOptions.position(point);
                 markerOptions.title("Usar esta ubicación");
                 markerOptions.draggable(true);
@@ -235,13 +288,20 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, View.O
                         relativeLayout.setVisibility(View.VISIBLE);
                         info.setVisibility(View.GONE);
                         fabUbicacion.setVisibility(View.GONE);
-                        txtDireccion.setText("Longitud: "+point.longitude+"\nLatitud: "+point.longitude);
+                        fabSeleccionar.setVisibility(View.VISIBLE);
+                        fabCancelUbicacion.setVisibility(View.VISIBLE);
                         fabSeleccionar.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 detallesUbicacion(point);
                             }
                         });
+
+                        try {
+                            hereLocation(point.latitude, point.longitude);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
             }
@@ -251,6 +311,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, View.O
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mUiSettings = mMap.getUiSettings();
 
         Toast.makeText(getApplicationContext(), "El mapa estpa listo", Toast.LENGTH_SHORT).show();
         if (mLocationPermissionGranted) {
@@ -264,7 +325,11 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, View.O
             }
             mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
             mMap.setMyLocationEnabled(true);
-            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+            mUiSettings.setMapToolbarEnabled(false);
+            mUiSettings.setCompassEnabled(true);
+            mUiSettings.setMyLocationButtonEnabled(false);
+            mUiSettings.setZoomControlsEnabled(false);
+            mUiSettings.setAllGesturesEnabled(true);
         }
     }
 
@@ -274,6 +339,13 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, View.O
             switch (view.getId()){
                 case R.id.fabUbicacion:
                     seleccionarUbicacion();
+                    break;
+                case R.id.fabCancelUbicacion:
+                    relativeLayout.setVisibility(View.GONE);
+                    info.setVisibility(View.VISIBLE);
+                    fabUbicacion.setVisibility(View.VISIBLE);
+                    fabSeleccionar.setVisibility(View.GONE);
+                    fabCancelUbicacion.setVisibility(View.GONE);
                     break;
             }
         } catch (Exception e){

@@ -1,5 +1,7 @@
 package com.example.administrador.mandaditostec.Cliente;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -7,13 +9,17 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.Login.Acceder;
 import com.example.administrador.mandaditostec.Cliente.Mandaderos.FragmentMandaderos;
 import com.example.administrador.mandaditostec.Cliente.Pedido.FragmentPedidos;
 import com.example.administrador.mandaditostec.Cliente.Perfil.FragmentPerfil;
 import com.example.administrador.mandaditostec.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class BottomNavigation extends AppCompatActivity implements
         FragmentPedidos.OnFragmentInteractionListener,
@@ -21,15 +27,22 @@ public class BottomNavigation extends AppCompatActivity implements
         FragmentPerfil.OnFragmentInteractionListener{
     //Declaración del menú de navegación
     private BottomNavigationView navigation;
+
     //Declaración de los fragmentos
     private FragmentPedidos fragmentPedidos;
     private FragmentMandaderos fragmentMandaderos;
     private FragmentPerfil fragmentPerfil;
 
+    //Instancia a Autentificación de Firebase
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bottom_navigation);
+
+        //Inicializa instancia de autentificación de Firebase
+        mAuth = FirebaseAuth.getInstance();
 
         //Creando las instancias de los fragmentos
         fragmentPedidos = new FragmentPedidos();
@@ -40,6 +53,24 @@ public class BottomNavigation extends AppCompatActivity implements
         //Instanciando la vista del menú de navegación
         navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(navigationListener);//Listener
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        //Usuario no logeado regresa a activity de registro
+        if (currentUser == null){
+            backToWelcome();
+        }
+    }
+
+    //Método para volver a activitu de logeo y registro
+    private void backToWelcome() {
+        Intent start = new Intent(BottomNavigation.this, Acceder.class);
+        startActivity(start);
+        finish();
     }
 
     //Listener para el menu de navegación

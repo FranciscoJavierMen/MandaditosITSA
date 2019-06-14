@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -30,7 +31,8 @@
                 android:textSize="16sp"/>
 
             <TextView
-                android:id="@+id/txtNombreCliente"
+                android:gravity="center"
+                android:id="@+id/txtNombreClienteP"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -40,28 +42,218 @@
                 android:textStyle="bold"
                 android:textSize="22sp" />
 
-            <RelativeLayout
+            <TextView
+                android:layout_gravity="center"
+                android:id="@+id/txtCorreoClienteP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="15dp"
+                android:text="@string/residencia_cliente"
+                android:textSize="16sp"
+                android:textColor="@color/negro"
+                android:textStyle="italic"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:background="@color/blanco"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <View
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="20dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="1px"
+                android:background="@color/cardview_dark_background" />
 
-                <TextView
-                    android:id="@+id/txtCorreoCliente"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/estadisticas"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="@color/negro"
+                android:textStyle="bold"/>
+
+            <View
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/cardview_dark_background" />
+
+            <LinearLayout
+                android:background="@color/blanco"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.CardView
+                    app:cardBackgroundColor="@color/azulClaro"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="5dp"
+                    style="@style/cardPedidos">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:textColor="@color/negro"
+                            style="@style/textoTituloPedido"
+                            android:text="@string/numero_pedidos_total"/>
+
+                        <TextView
+                            android:id="@+id/txtPedidosTotal"
+                            android:textColor="@color/azulObscuro"
+                            android:textStyle="bold"
+                            android:textSize="32sp"
+                            style="@style/textoTituloPedido"
+                            android:text="@string/numero_pedidos_total"/>
+
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <LinearLayout
                     android:layout_marginTop="5dp"
-                    android:layout_marginStart="15dp"
-                    android:text="@string/residencia_cliente"
-                    android:textSize="14sp"
-                    android:textColor="@color/negro"
-                    android:textStyle="italic"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:weightSum="2"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_toEndOf="@+id/txtCorreoCliente"
-                    android:src="@drawable/ic_edit"/>
-            </RelativeLayout>
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.CardView
+                        app:cardBackgroundColor="@color/azul"
+                        android:layout_weight="1"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginBottom="0dp"
+                        style="@style/cardPedidos">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:textColor="@color/negro"
+                                style="@style/textoTituloPedido"
+                                android:text="@string/tab_text_1"/>
+
+                            <TextView
+                                android:id="@+id/txtPedidosPendientes"
+                                android:textColor="@color/blanco"
+                                android:textStyle="bold"
+                                android:textSize="32sp"
+                                style="@style/textoTituloPedido"
+                                android:text="@string/tab_text_1"/>
+
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        app:cardBackgroundColor="@color/menta"
+                        android:layout_weight="1"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginBottom="0dp"
+                        style="@style/cardPedidos">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:textColor="@color/negro"
+                                style="@style/textoTituloPedido"
+                                android:text="@string/tab_text_2"/>
+
+                            <TextView
+                                android:id="@+id/txtPedidosAceptados"
+                                android:textColor="@color/blanco"
+                                android:textStyle="bold"
+                                android:textSize="32sp"
+                                style="@style/textoTituloPedido"
+                                android:text="@string/tab_text_2"/>
+
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:weightSum="2"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.CardView
+                        app:cardBackgroundColor="@color/escarlata"
+                        android:layout_weight="1"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginBottom="0dp"
+                        style="@style/cardPedidos">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:textColor="@color/negro"
+                                style="@style/textoTituloPedido"
+                                android:text="@string/tab_text_4"/>
+
+                            <TextView
+                                android:id="@+id/txtPedidosRechazados"
+                                android:textColor="@color/blanco"
+                                android:textStyle="bold"
+                                android:textSize="32sp"
+                                style="@style/textoTituloPedido"
+                                android:text="@string/tab_text_4"/>
+
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        app:cardBackgroundColor="@color/verde"
+                        android:layout_weight="1"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginBottom="0dp"
+                        style="@style/cardPedidos">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:textColor="@color/negro"
+                                style="@style/textoTituloPedido"
+                                android:text="@string/tab_text_3"/>
+
+                            <TextView
+                                android:id="@+id/txtPedidosFinalizados"
+                                android:textColor="@color/blanco"
+                                android:textStyle="bold"
+                                android:textSize="32sp"
+                                style="@style/textoTituloPedido"
+                                android:text="@string/tab_text_3"/>
+
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                </LinearLayout>
+            </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -96,7 +288,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:paddingStart="15dp"
-                android:layout_marginBottom="60dp"
+                android:layout_marginBottom="10dp"
                 android:paddingEnd="15dp"
                 android:layout_gravity="center"
                 android:text="@string/cerrar_sesion"
