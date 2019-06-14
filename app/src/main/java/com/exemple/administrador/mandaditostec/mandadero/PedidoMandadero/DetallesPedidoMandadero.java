@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.administrador.mandaditostec.Cliente.Pedido.Chat;
 import com.example.administrador.mandaditostec.Cliente.Pedido.FormDialog;
 import com.example.administrador.mandaditostec.R;
 import com.exemple.administrador.mandaditostec.mandadero.MapaMandadero.MapaMandadero;
@@ -32,6 +34,9 @@ public class DetallesPedidoMandadero extends DialogFragment {
     private Toolbar toolbar;
     private String latorig,lngorig,latdest,lngdest;
     public static String distancia,direccion;
+    private CardView cardChat;
+    public static String idMandadero;
+    public static String nombreMandadero;
 
     private FloatingActionButton irdireccion,aceptar,cancerlar;
     private DatabaseReference databaseReference;
@@ -55,6 +60,7 @@ public class DetallesPedidoMandadero extends DialogFragment {
     @Override
     public void onStart() {
         super.onStart();
+        Toast.makeText(getContext(), ""+idMandadero, Toast.LENGTH_SHORT).show();
         Dialog dialog = getDialog();
         if (dialog != null) {
             int width = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -105,9 +111,18 @@ public class DetallesPedidoMandadero extends DialogFragment {
         tvdireccion = view.findViewById(R.id.direccionmandado);
 
         detallespedido = view.findViewById(R.id.descripcion);
+        cardChat = view.findViewById(R.id.cardChatM);
         hora = view.findViewById(R.id.time);
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Pedido");
 
+        cardChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent chat = new Intent(getContext(), ChatM.class);
+                chat.putExtra("idCliente", idMandadero);
+                startActivity(chat);
+            }
+        });
 
         return view;
     }

@@ -1,24 +1,25 @@
-package com.example.administrador.mandaditostec.Cliente.Pedido;
+package com.exemple.administrador.mandaditostec.mandadero.PedidoMandadero;
 
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.administrador.mandaditostec.Cliente.Pedido.Mensajes;
 import com.example.administrador.mandaditostec.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
-public class AdaptadorMensajes extends RecyclerView.Adapter<AdaptadorMensajes.ViewHolder>{
+public class AdaptadorMensajesM extends RecyclerView.Adapter<AdaptadorMensajesM.ViewHolder>{
 
     private List<Mensajes> listMensajes;
     private String current_user_id;
 
-    AdaptadorMensajes(List<Mensajes> listMensajes) {
+    AdaptadorMensajesM(List<Mensajes> listMensajes) {
         this.listMensajes = listMensajes;
     }
 

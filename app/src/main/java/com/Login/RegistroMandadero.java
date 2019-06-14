@@ -100,7 +100,6 @@ public class RegistroMandadero extends AppCompatActivity implements View.OnClick
                             mandadero.put("nombre", name);
                             mandadero.put("correo", email);
                             mandadero.put("estado", "disponible");
-                            mandadero.put("imagen", "default image");
 
                             database.setValue(mandadero).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override

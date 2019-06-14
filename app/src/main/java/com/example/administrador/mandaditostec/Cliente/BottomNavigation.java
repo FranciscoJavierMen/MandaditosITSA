@@ -59,7 +59,6 @@ public class BottomNavigation extends AppCompatActivity implements
     protected void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-
         //Usuario no logeado regresa a activity de registro
         if (currentUser == null){
             backToWelcome();

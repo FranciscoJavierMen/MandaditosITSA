@@ -19,8 +19,6 @@
             app:contentInsetStartWithNavigation="0dp"
             app:navigationIcon="@drawable/ic_close_black_24dp">
 
-
-
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>

@@ -1,11 +1,10 @@
-package com.example.administrador.mandaditostec.Cliente.Pedido;
+package com.exemple.administrador.mandaditostec.mandadero.PedidoMandadero;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,10 +14,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.administrador.mandaditostec.Cliente.Pedido.AdaptadorMensajes;
+import com.example.administrador.mandaditostec.Cliente.Pedido.Mensajes;
 import com.example.administrador.mandaditostec.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,7 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Chat extends AppCompatActivity {
+public class ChatM extends AppCompatActivity {
 
     private String nombreMandadero, idMandadero;
 
@@ -44,7 +42,7 @@ public class Chat extends AppCompatActivity {
     private String current_user;
     private EditText edtmensaje;
     private final List<Mensajes> listaMensajes = new ArrayList<>();;
-    private AdaptadorMensajes adapter;
+    private AdaptadorMensajesM adapter;
     private RecyclerView recyclerMensajes;
     private SwipeRefreshLayout refreshChat;
     private LinearLayoutManager linearLayoutManager;
@@ -68,11 +66,10 @@ public class Chat extends AppCompatActivity {
 
         try{
             Intent intent = getIntent();
-            idMandadero = intent.getStringExtra("idMandadero");
-            nombreMandadero = intent.getStringExtra("nombreMandadero");
+            idMandadero = intent.getStringExtra("idCliente");
 
             Toolbar toolbar = findViewById(R.id.toolbar);
-            toolbar.setTitle(nombreMandadero);
+            toolbar.setTitle("Cliente");
             setSupportActionBar(toolbar);
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -94,7 +91,7 @@ public class Chat extends AppCompatActivity {
         recyclerMensajes.setLayoutManager(linearLayoutManager);
 
         cargarMensajes();
-        adapter = new AdaptadorMensajes(listaMensajes);
+        adapter = new AdaptadorMensajesM(listaMensajes);
         recyclerMensajes.setAdapter(adapter);
         setChat();
 

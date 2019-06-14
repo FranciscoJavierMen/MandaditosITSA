@@ -150,7 +150,7 @@ public class PMandaderoPendientes extends Fragment {
 
                 databaseReference.child(pedidoID).addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
 
                             //inal String direccionD = dataSnapshot.child("mandadero").getValue().toString();
@@ -171,6 +171,9 @@ public class PMandaderoPendientes extends Fragment {
                                     latorig = latorigen;
                                     lngorig = lngorigen;
 
+                                    final String idMandadero = dataSnapshot.child("idCliente").getValue().toString();
+                                    Toast.makeText(getContext(), ""+idMandadero, Toast.LENGTH_SHORT).show();
+
                                     latdest = latdestino;
                                     lngdest = lngdestino;
 
@@ -187,6 +190,7 @@ public class PMandaderoPendientes extends Fragment {
                                     DetallesPedidoMandadero.distancia = distancia;
                                     DetallesPedidoMandadero.direccion = direccion;
                                     DetallesPedidoMandadero.key = pedidoID;
+                                    DetallesPedidoMandadero.idMandadero = idMandadero;
                                     DetallesPedidoMandadero.display(getFragmentManager());
                                 }
                             });

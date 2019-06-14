@@ -29,6 +29,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.administrador.mandaditostec.Cliente.Pedido.DetallesPedido;
 import com.example.administrador.mandaditostec.Cliente.Pedido.FormDialog;
 import com.example.administrador.mandaditostec.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -144,7 +145,7 @@ public class PMandaderoAceptados extends Fragment {
 
                 referenceAceptados.child(pedidoID).addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
 
                             //inal String direccionD = dataSnapshot.child("mandadero").getValue().toString();
@@ -166,6 +167,9 @@ public class PMandaderoAceptados extends Fragment {
                                     latdest = latdestino + "";
                                     lngdest = lngdestino + "";
 
+                                    final String idMandadero = dataSnapshot.child("idCliente").getValue().toString();
+                                    Toast.makeText(getContext(), ""+idMandadero, Toast.LENGTH_SHORT).show();
+
                                     double latd=Double.parseDouble(latdestino);
                                     double lngd=Double.parseDouble(lngdestino);
 
@@ -178,6 +182,8 @@ public class PMandaderoAceptados extends Fragment {
                                     DetallesPedidoMandadero.distancia = distancia;
                                     DetallesPedidoMandadero.direccion = direccion;
                                     DetallesPedidoMandadero.key = pedidoID;
+                                    DetallesPedidoMandadero.idMandadero = idMandadero;
+                                    DetallesPedidoMandadero.idMandadero = idMandadero;
                                     DetallesPedidoMandadero.display(getFragmentManager());
                                 }
                             });

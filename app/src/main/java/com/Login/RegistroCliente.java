@@ -80,7 +80,6 @@ public class RegistroCliente extends AppCompatActivity implements View.OnClickLi
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-
                             FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
                             String uid = current_user.getUid();
 
@@ -89,8 +88,6 @@ public class RegistroCliente extends AppCompatActivity implements View.OnClickLi
                             HashMap<String, String> cliente = new HashMap<>();
                             cliente.put("nombre", name);
                             cliente.put("correo", email);
-                            cliente.put("estado", "Hola, estoy usando Mandaditos TEC");
-                            cliente.put("imagen", "default image");
 
                             database.setValue(cliente).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override

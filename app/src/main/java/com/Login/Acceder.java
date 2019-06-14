@@ -20,10 +20,18 @@ import android.widget.Toast;
 import com.example.administrador.mandaditostec.Cliente.BottomNavigation;
 import com.example.administrador.mandaditostec.Cliente.checkNetworkConnection;
 import com.example.administrador.mandaditostec.R;
+import com.exemple.administrador.mandaditostec.mandadero.PedidoMandadero.Bottom_navigation_mandadero;
+import com.exemple.administrador.mandaditostec.mandadero.PedidoMandadero.TodosMandados;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class Acceder extends AppCompatActivity implements View.OnClickListener{
 
@@ -31,6 +39,8 @@ public class Acceder extends AppCompatActivity implements View.OnClickListener{
     private AppCompatButton btnAcceder;
     private TextView txtCrear;
     checkNetworkConnection checkNetworkConnection;
+    private DatabaseReference databaseReference;
+    private String current_user;
 
     private ProgressDialog progressDialog;
 
@@ -43,6 +53,12 @@ public class Acceder extends AppCompatActivity implements View.OnClickListener{
 
         checkNetworkConnection = new checkNetworkConnection(this);
         mAuth = FirebaseAuth.getInstance();
+
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            current_user = user.getUid();
+        }
 
         init();
     }
@@ -88,16 +104,18 @@ public class Acceder extends AppCompatActivity implements View.OnClickListener{
     }
 
     //Método para acceder con usuarios registrados
-    private void loginUser(String email, String password) {
+    private void loginUser(final String email, final String password) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             progressDialog.dismiss();
-                            Intent inicio = new Intent(Acceder.this, BottomNavigation.class);
+                            //checkUserType(task.getResult().getUser());
+                            Intent inicio = new Intent(Acceder.this, TodosMandados.class);
                             startActivity(inicio);
                             finish();
+
                         } else {
                             progressDialog.hide();
                             Toast.makeText(Acceder.this, "No se ha podido acceder", Toast.LENGTH_SHORT).show();
@@ -106,6 +124,39 @@ public class Acceder extends AppCompatActivity implements View.OnClickListener{
                     }
                 });
 
+    }
+
+    //Revisa el tipo de usuario
+    private void checkUserType(FirebaseUser user){
+        //String username = usernameFromEmail(user.getEmail())
+        if (user != null) {
+            //Toast.makeText(signinActivity.this, user.getUid(), Toast.LENGTH_SHORT).show();
+            databaseReference = FirebaseDatabase.getInstance().getReference().child("Usuario").child(user.getUid()).child("tipo");
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String value = dataSnapshot.getValue(String.class);
+                    //for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    // Toast.makeText(signinActivity.this, value, Toast.LENGTH_SHORT).show();
+                    if(value.equals("cliente")) {
+                        //String jason = (String) snapshot.getValue();
+                        //Toast.makeText(signinActivity.this, jason, Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(Acceder.this, BottomNavigation.class));
+                        //Toast.makeText(Acceder.this, "You're Logged in as Seller", Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else {
+                        startActivity(new Intent(Acceder.this, Bottom_navigation_mandadero.class));
+                        //Toast.makeText(signinActivity.this, "You're Logged in as Buyer", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 
     //Muestra mensaje de confirmación de recepción
