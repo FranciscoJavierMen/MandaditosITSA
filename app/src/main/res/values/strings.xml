@@ -74,4 +74,12 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="title_activity_mapa_mandadero">Mapa</string>
+    <string name="pedidosrealizados">PEDIDOS REALIZADOS</string>
+    <string name="pedidospendientes">PEDIDOS PENDIENTES</string>
+    <string name="pedidosaceptados">PEDIDOS ACEPTADOS</string>
+    <string name="title_activity_todos_mandados">TodosMandados</string>
+    <string name="tab_text_1">Pedidos pendientes</string>
+    <string name="tab_text_2">Pedidos Realizados</string>
+    <string name="tab_text_3">Pedidos Aceptados</string>
 </resources>

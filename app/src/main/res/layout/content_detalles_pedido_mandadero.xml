@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.exemple.administrador.mandaditostec.mandadero.DetallesPedidoMandadero"
+    tools:context="com.exemple.administrador.mandaditostec.mandadero.PedidoMandadero.DetallesPedidoMandadero"
     tools:showIn="@layout/detalles_pedido_mandadero">
 
     <LinearLayout
@@ -137,18 +137,13 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/colonia"
+                                android:id="@+id/direccionmandado"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Colonia"
                                 android:textSize="20sp" />
 
-                            <TextView
-                                android:id="@+id/calle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Calle"
-                                android:textSize="20sp" />
+
 
                             <TextView
                                 android:id="@+id/distancia"
@@ -331,7 +326,7 @@
                     android:layout_gravity="center">
 
                     <android.support.design.widget.FloatingActionButton
-                        android:id="@+id/fab"
+                        android:id="@+id/aceptarpedido"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/fab_margin"
@@ -340,7 +335,7 @@
                         app:srcCompat="@drawable/ic_done" />
 
                     <android.support.design.widget.FloatingActionButton
-                        android:id="@+id/cancelar"
+                        android:id="@+id/cancelarpedido"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/fab_margin"

@@ -12,9 +12,9 @@ import android.widget.TextView;
 
 import com.example.administrador.mandaditostec.R;
 
-public class Bottom_navigation_mandadero extends AppCompatActivity implements PedidosMandaderosFragment.OnFragmentInteractionListener {
+public class Bottom_navigation_mandadero extends AppCompatActivity implements PMandaderoPendientes.OnFragmentInteractionListener {
     private TextView mTextMessage;
-    private PedidosMandaderosFragment FragmentPedidos;
+    private PMandaderoPendientes FragmentPedidos;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -40,7 +40,7 @@ public class Bottom_navigation_mandadero extends AppCompatActivity implements Pe
         BottomNavigationView navView = findViewById(R.id.navigation_mandadero);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        FragmentPedidos = new PedidosMandaderosFragment();
+        FragmentPedidos = new PMandaderoPendientes();
         setFragment(FragmentPedidos);
     }
 
