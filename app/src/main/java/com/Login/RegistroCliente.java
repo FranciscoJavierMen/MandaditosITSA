@@ -32,7 +32,7 @@ public class RegistroCliente extends AppCompatActivity implements View.OnClickLi
 
     private FirebaseAuth mAuth;
     private ProgressDialog progressDialog;
-    private DatabaseReference database;
+    private DatabaseReference database, reference;
     com.example.administrador.mandaditostec.Cliente.checkNetworkConnection checkNetworkConnection;
 
 
@@ -67,14 +67,14 @@ public class RegistroCliente extends AppCompatActivity implements View.OnClickLi
             progressDialog.setMessage("Se esta creando tu cuenta");
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.show();
-            regiterUser(name, email, password);
+            registerUser(name, email, password);
         } else {
             Toast.makeText(RegistroCliente.this, "Algunos campos están vacios...", Toast.LENGTH_SHORT).show();
         }
     }
 
     //Registra un nuevo usuario
-    private void regiterUser(final String name, final String email, String pass){
+    private void registerUser(final String name, final String email, String pass){
         mAuth.createUserWithEmailAndPassword(email, pass)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -84,8 +84,12 @@ public class RegistroCliente extends AppCompatActivity implements View.OnClickLi
                             String uid = current_user.getUid();
 
                             database = FirebaseDatabase.getInstance().getReference().child("Cliente").child(uid);
+                            reference = FirebaseDatabase.getInstance().getReference().child("Usuario").child(uid);
 
+
+                            //Registro del cliente
                             HashMap<String, String> cliente = new HashMap<>();
+                            cliente.put("id", uid);
                             cliente.put("nombre", name);
                             cliente.put("correo", email);
 
@@ -99,6 +103,23 @@ public class RegistroCliente extends AppCompatActivity implements View.OnClickLi
                                         Intent inicio = new Intent(RegistroCliente.this, Acceder.class);
                                         startActivity(inicio);
                                         finish();
+                                    }
+                                }
+                            });
+
+                            //Registro del usuario como cliente
+                            HashMap<String, String> usuario = new HashMap<>();
+                            usuario.put("id", uid);
+                            usuario.put("nombre", name);
+                            usuario.put("correo", email);
+                            usuario.put("tipo", "cliente");
+
+                            reference.setValue(usuario).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()){
+                                        progressDialog.dismiss();
+
                                     }
                                 }
                             });

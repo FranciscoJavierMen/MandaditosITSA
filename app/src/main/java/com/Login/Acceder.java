@@ -111,11 +111,7 @@ public class Acceder extends AppCompatActivity implements View.OnClickListener{
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             progressDialog.dismiss();
-                            //checkUserType(task.getResult().getUser());
-                            Intent inicio = new Intent(Acceder.this, TodosMandados.class);
-                            startActivity(inicio);
-                            finish();
-
+                            checkUserType(task.getResult().getUser());
                         } else {
                             progressDialog.hide();
                             Toast.makeText(Acceder.this, "No se ha podido acceder", Toast.LENGTH_SHORT).show();
@@ -136,17 +132,14 @@ public class Acceder extends AppCompatActivity implements View.OnClickListener{
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     String value = dataSnapshot.getValue(String.class);
-                    //for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    // Toast.makeText(signinActivity.this, value, Toast.LENGTH_SHORT).show();
                     if(value.equals("cliente")) {
-                        //String jason = (String) snapshot.getValue();
-                        //Toast.makeText(signinActivity.this, jason, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Acceder.this, "Haz accedido como "+value, Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(Acceder.this, BottomNavigation.class));
-                        //Toast.makeText(Acceder.this, "You're Logged in as Seller", Toast.LENGTH_SHORT).show();
                         finish();
-                    } else {
-                        startActivity(new Intent(Acceder.this, Bottom_navigation_mandadero.class));
-                        //Toast.makeText(signinActivity.this, "You're Logged in as Buyer", Toast.LENGTH_SHORT).show();
+                    }
+                    if (value.equals("mandadero")){
+                        Toast.makeText(Acceder.this, "Haz accedido como "+value, Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(Acceder.this, TodosMandados.class));
                         finish();
                     }
                 }

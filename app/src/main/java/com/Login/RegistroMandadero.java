@@ -32,7 +32,7 @@ public class RegistroMandadero extends AppCompatActivity implements View.OnClick
 
     private FirebaseAuth mAuth;
     private ProgressDialog progressDialog;
-    private DatabaseReference database;
+    private DatabaseReference database, reference;
     com.example.administrador.mandaditostec.Cliente.checkNetworkConnection checkNetworkConnection;
 
     @Override
@@ -94,7 +94,9 @@ public class RegistroMandadero extends AppCompatActivity implements View.OnClick
                             String uid = current_user.getUid();
 
                             database = FirebaseDatabase.getInstance().getReference().child("Mandadero").child(uid);
+                            reference = FirebaseDatabase.getInstance().getReference().child("Usuario").child(uid);
 
+                            //Registro de mandadero
                             HashMap<String, String> mandadero = new HashMap<>();
                             mandadero.put("id", uid);
                             mandadero.put("nombre", name);
@@ -111,6 +113,23 @@ public class RegistroMandadero extends AppCompatActivity implements View.OnClick
                                         Intent inicio = new Intent(RegistroMandadero.this, Acceder.class);
                                         startActivity(inicio);
                                         finish();
+                                    }
+                                }
+                            });
+
+                            //Registro de usuario como mandadero
+                            HashMap<String, String> usuario = new HashMap<>();
+                            usuario.put("id", uid);
+                            usuario.put("nombre", name);
+                            usuario.put("correo", email);
+                            usuario.put("tipo", "mandadero");
+
+                            reference.setValue(usuario).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()){
+                                        progressDialog.dismiss();
+
                                     }
                                 }
                             });

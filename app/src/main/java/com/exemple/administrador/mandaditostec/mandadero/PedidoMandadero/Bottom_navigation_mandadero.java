@@ -60,9 +60,6 @@ public class Bottom_navigation_mandadero extends AppCompatActivity implements PM
     protected void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-
-        Toast.makeText(this, "User: "+currentUser.getUid(), Toast.LENGTH_SHORT).show();
-
         //Usuario no logeado regresa a activity de registro
         if (currentUser == null){
             backToWelcome();
