@@ -5,7 +5,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -13,29 +12,25 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.administrador.mandaditostec.Cliente.Pedido.FormDialog;
+import com.example.administrador.mandaditostec.Cliente.checkNetworkConnection;
 import com.example.administrador.mandaditostec.R;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,40 +39,36 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class PMandaderoPendientes extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private FloatingActionButton fabPedido;
 
     LocationManager mlocManager;
     Localizacion Local;
     Location lastLocation;
 
     Double lat = 0.0, lng = 0.0;
-    String latorig="0.0", lngorig="0.0", latdest="0.0", lngdest="0.0", distancia="0.0", direccion="0.0";
+    private String latorig="0.0", lngorig="0.0", latdest="0.0", lngdest="0.0",
+            distancia="0.0", direccion="0.0";
 
     //Lista y modelo
     private RecyclerView recyclerPendientes;
-    private AdaptadorPedidos adaptadorPedidos;
     private ArrayList<PedidosMandadero> listaPedidos = new ArrayList<>();
-    private SwipeRefreshLayout refreshPedidos;
-    private CoordinatorLayout coordinatorLayout;
+    private com.example.administrador.mandaditostec.Cliente.checkNetworkConnection checkNetworkConnection;
 
     //Firebase
-    private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
+    private String idMandadero;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private ImageView avion;
+    private TextView textEmpty;
+
 
     private PMandaderoPendientes.OnFragmentInteractionListener mListener;
 
@@ -85,7 +76,6 @@ public class PMandaderoPendientes extends Fragment {
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
     public static PMandaderoPendientes newInstance(String param1, String param2) {
         PMandaderoPendientes fragment = new PMandaderoPendientes();
         Bundle args = new Bundle();
@@ -98,105 +88,70 @@ public class PMandaderoPendientes extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
+        checkNetworkConnection = new checkNetworkConnection(getContext());
+        try{
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            FirebaseUser current_user = mAuth.getCurrentUser();
+            if (current_user != null) {
+                idMandadero = current_user.getUid();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
         }
 
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
+        if (ActivityCompat.checkSelfPermission(getContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
         } else {
             locationStart();
         }
 
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_pedidos_mandaderos, container, false);
-        //inicializarFirebase();
         inicializarComponentes(view);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Pedido");
+        databaseReference = FirebaseDatabase.getInstance().getReference();
 
         RecyclerView.LayoutManager nLayoutManager = new LinearLayoutManager(getActivity());
         ((LinearLayoutManager) nLayoutManager).setReverseLayout(true);
         ((LinearLayoutManager) nLayoutManager).setStackFromEnd(false);
 
-
-
         recyclerPendientes.setLayoutManager(nLayoutManager);
-        //locationStart();
-        Toast.makeText(getActivity().getApplicationContext(), "lat"+latdest, Toast.LENGTH_SHORT).show();
-
 
         return view;
     }
 
-    public void Pendientes() {
-        FirebaseRecyclerOptions<PedidosMandadero> opciones
-                = new FirebaseRecyclerOptions.Builder<PedidosMandadero>()
-                .setQuery(databaseReference.orderByChild("estado").equalTo("pendiente"), PedidosMandadero.class)
-                .build();
-
-        FirebaseRecyclerAdapter<PedidosMandadero, PMandaderoPendientes.PedidosMandaderoViewHolder> adapter
-                = new FirebaseRecyclerAdapter<PedidosMandadero, PMandaderoPendientes.PedidosMandaderoViewHolder>(opciones) {
-            @Override
-            protected void onBindViewHolder(final PedidosMandaderoViewHolder holder, int position, PedidosMandadero model) {
-                final String pedidoID = getRef(position).getKey();
-
-                databaseReference.child(pedidoID).addValueEventListener(new ValueEventListener() {
+    private void isCurrenUser(){
+        databaseReference.child("Pedido")
+                .addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Iterator<DataSnapshot> items = dataSnapshot.getChildren().iterator();
+                        checkData(dataSnapshot);
+                        listaPedidos.clear();
+                        while (items.hasNext()) {
+                            DataSnapshot item = items.next();
+                            PedidosMandadero pedido = item.getValue(PedidosMandadero.class);
 
-                            //inal String direccionD = dataSnapshot.child("mandadero").getValue().toString();
-                            final String pedido = dataSnapshot.child("pedido").getValue().toString();
-                            final String fecha = dataSnapshot.child("hora").getValue().toString();
-                            final String latorigen = dataSnapshot.child("latitudOrigen").getValue().toString();
-                            final String lngorigen = dataSnapshot.child("longitudOrigen").getValue().toString();
-                            final String latdestino = dataSnapshot.child("latitudDestino").getValue().toString();
-                            final String lngdestino = dataSnapshot.child("longitudDestino").getValue().toString();
+                            if (pedido.getIdMandadero().equals(idMandadero) && pedido.getEstado().equals("pendiente")) {
+                                listaPedidos.add(pedido);
+                            }
 
-
-                            holder.tvpedido.setText(pedido);
-                            holder.tvhora.setText(fecha);
-
-                            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    latorig = latorigen;
-                                    lngorig = lngorigen;
-
-                                    final String idMandadero = dataSnapshot.child("idCliente").getValue().toString();
-                                    Toast.makeText(getContext(), ""+idMandadero, Toast.LENGTH_SHORT).show();
-
-                                    latdest = latdestino;
-                                    lngdest = lngdestino;
-
-                                    double latd=Double.parseDouble(latdestino);
-                                    double lngd=Double.parseDouble(lngdestino);
-
-                                    Location locationA = new Location("Destino");
-
-                                    locationA.setLatitude(latd);
-                                    locationA.setLongitude(lngd);
-
-                                    obtenerDireccionRapido(locationA);
-
-                                    DetallesPedidoMandadero.distancia = distancia;
-                                    DetallesPedidoMandadero.direccion = direccion;
-                                    DetallesPedidoMandadero.key = pedidoID;
-                                    DetallesPedidoMandadero.idMandadero = idMandadero;
-                                    DetallesPedidoMandadero.display(getFragmentManager());
-                                }
-                            });
-                        } else {
-                            Toast.makeText(getActivity().getApplicationContext(), "El nodo no existe", Toast.LENGTH_SHORT).show();
                         }
+                        checkList(listaPedidos);
+                        recyclerPendientes.setAdapter(new pedidosAdapter(listaPedidos));
+                        recyclerPendientes.getAdapter().notifyDataSetChanged();
+                        databaseReference.child("Pedido").removeEventListener(this);
+
                     }
 
                     @Override
@@ -204,62 +159,134 @@ public class PMandaderoPendientes extends Fragment {
 
                     }
                 });
-            }
-
-
-            @Override
-            public PMandaderoPendientes.PedidosMandaderoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.row_pedido, parent, false);
-                return new PMandaderoPendientes.PedidosMandaderoViewHolder(view);
-            }
-        };
-        recyclerPendientes.setAdapter(adapter);
-        adapter.startListening();
     }
 
+    private class pedidosAdapter extends RecyclerView.Adapter<pedidosAdapter.RecViewHolder> {
+
+        private ArrayList<PedidosMandadero> listaPedidos;
+
+        public pedidosAdapter(ArrayList<PedidosMandadero> listaPedidos) {
+            this.listaPedidos = listaPedidos;
+        }
+
+        @Override
+        public pedidosAdapter.RecViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(getContext()).inflate(R.layout.item_pedido, null);
+            return new RecViewHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(RecViewHolder holder, int position) {
+            final PedidosMandadero modelo = listaPedidos.get(position);
+            holder.txtDireccionDestino.setText(modelo.getMandadero());
+            holder.txtPedido.setText(modelo.getPedido());
+            holder.txtHora.setText(modelo.getHora());
+            holder.image.setImageResource(R.drawable.img_reloj);
+
+
+            final String latorigen = modelo.getLatitudOrigen();
+            final String latdestino = modelo.getLatitudDestino();
+            final String lngdestino = modelo.getLongitudDestino();
+            final String lngorigen = modelo.getLongitudOrigen();
+            final String pedidoID = modelo.getId();
+            final String idMandadero = modelo.getIdMandadero();
+
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    latorig = latorigen + "";
+                    lngorig = lngorigen + "";
+                    latdest = latdestino + "";
+                    lngdest = lngdestino + "";
+
+
+                    Toast.makeText(getContext(), ""+idMandadero, Toast.LENGTH_SHORT).show();
+
+                    double latd=Double.parseDouble(modelo.getLatitudDestino());
+                    double lngd=Double.parseDouble(modelo.getLongitudDestino());
+
+                    Location locationA = new Location("Destino");
+
+                    locationA.setLatitude(latd);
+                    locationA.setLongitude(lngd);
+
+                    obtenerDireccionRapido(locationA);
+                    DetallesPedidoMandadero.distancia = distancia;
+                    DetallesPedidoMandadero.direccion = direccion;
+                    DetallesPedidoMandadero.key = pedidoID;
+                    DetallesPedidoMandadero.idMandadero = idMandadero;
+                    DetallesPedidoMandadero.idMandadero = idMandadero;
+                    DetallesPedidoMandadero.display(getFragmentManager());
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return listaPedidos.size();
+        }
+
+        public class RecViewHolder extends RecyclerView.ViewHolder {
+
+            private TextView txtDireccionDestino, txtPedido, txtHora;
+            private ImageView image;
+
+            public RecViewHolder(View itemView) {
+                super(itemView);
+
+                txtDireccionDestino = itemView.findViewById(R.id.txtDireccionPedido);
+                txtPedido = itemView.findViewById(R.id.txtDescripcionPedido);
+                txtHora = itemView.findViewById(R.id.txtHoraPedido);
+                image = itemView.findViewById(R.id.imgPedido);
+            }
+        }
+    }
 
     @Override
     public void onStart() {
         super.onStart();
-
-        Pendientes();
-
+        if (!checkNetworkConnection.isConnected()){
+            recyclerPendientes.setVisibility(View.GONE);
+            avion.setImageResource(R.drawable.no_wifi);
+            avion.setVisibility(View.VISIBLE);
+            textEmpty.setText("No estas conectado a internet");
+            textEmpty.setVisibility(View.VISIBLE);
+        }
+        else{
+            isCurrenUser();
+            recyclerPendientes.setVisibility(View.VISIBLE);
+            avion.setVisibility(View.GONE);
+            textEmpty.setVisibility(View.GONE);
+        }
     }
 
-    public static class PedidosMandaderoViewHolder extends RecyclerView.ViewHolder {
+    private void checkData(DataSnapshot dataSnapshot){
+        if (dataSnapshot.getChildrenCount() < 1){
+            recyclerPendientes.setVisibility(View.GONE);
+            avion.setVisibility(View.VISIBLE);
+            textEmpty.setVisibility(View.VISIBLE);
+        }
+        else{
+            recyclerPendientes.setVisibility(View.VISIBLE);
+            avion.setVisibility(View.GONE);
+            textEmpty.setVisibility(View.GONE);
+        }
+    }
 
-        private TextView tvpedido, tvhora;
-
-        public PedidosMandaderoViewHolder(View itemView) {
-            super(itemView);
-
-            tvpedido = itemView.findViewById(R.id.tvdescripcionpedido);
-            tvhora = itemView.findViewById(R.id.tvhorapedido);
+    private void checkList(ArrayList arrayList){
+        if (arrayList.size() < 1){
+            recyclerPendientes.setVisibility(View.GONE);
+            avion.setVisibility(View.VISIBLE);
+            textEmpty.setVisibility(View.VISIBLE);
         }
     }
 
     private void inicializarComponentes(View view) {
         recyclerPendientes = view.findViewById(R.id.recyclerPedidosMandaderosPendientes);
-        //refreshPedidos = view.findViewById(R.id.refreshPedidos);
-        //fabPedido = view.findViewById(R.id.fabPedido);
-        coordinatorLayout = view.findViewById(R.id.fragmentpedidos);
-
-
-
-
-
-    }
-
-    private void abrirDialogo() {
-        FormDialog.display(getFragmentManager());
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+        avion = view.findViewById(R.id.imgEmptyMND);
+        textEmpty = view.findViewById(R.id.textEmptyMND);
     }
 
     @Override
@@ -284,7 +311,6 @@ public class PMandaderoPendientes extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-
     private void locationStart() {
         LocationManager mlocManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         Localizacion Local = new Localizacion();
@@ -303,6 +329,7 @@ public class PMandaderoPendientes extends Fragment {
         Toast.makeText(getActivity().getApplicationContext(), "Localización agregada", Toast.LENGTH_SHORT).show();
 
     }
+
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == 1000) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -404,9 +431,4 @@ public class PMandaderoPendientes extends Fragment {
             }
         }
     }
-
-    //termina
-
-
-
 }

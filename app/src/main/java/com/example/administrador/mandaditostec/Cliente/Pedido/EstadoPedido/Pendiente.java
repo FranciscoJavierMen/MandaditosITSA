@@ -52,13 +52,10 @@ public class Pendiente extends Fragment {
     private ImageView avion;
     private TextView textEmpty;
 
-    private FirebaseAuth mAuth;
     private String idCliente;
 
     //Lista y modelo
     private RecyclerView recyclerPedidos;
-    private SwipeRefreshLayout refreshPedidos;
-    private CoordinatorLayout coordinatorLayout;
     private ArrayList<ModeloPedidos> pedidos = new ArrayList<>();
 
     private com.example.administrador.mandaditostec.Cliente.checkNetworkConnection checkNetworkConnection;
@@ -67,8 +64,8 @@ public class Pendiente extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         checkNetworkConnection = new checkNetworkConnection(getContext());
-        mAuth = FirebaseAuth.getInstance();
-        FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser current_user = mAuth.getCurrentUser();
         if (current_user != null) {
             idCliente = current_user.getUid();
         }
@@ -84,27 +81,6 @@ public class Pendiente extends Fragment {
         inicializarComponentes(view);
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
-
-        // Seteamos los colores que se usarán a lo largo de la animación
-        refreshPedidos.setColorSchemeResources(R.color.verde);
-        refreshPedidos.setProgressBackgroundColorSchemeResource(R.color.blanco);
-        refreshPedidos.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                try {
-                    Thread.sleep(1000);
-                    refreshPedidos.setRefreshing(false);
-                    Snackbar snackbar = Snackbar
-                            .make(coordinatorLayout, "Lista de pedidos pendientes actualizada", Snackbar.LENGTH_LONG);
-
-                    snackbar.setActionTextColor(Color.YELLOW);
-                    snackbar.show();
-                    onStart();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mLayoutManager.setReverseLayout(true);
@@ -146,9 +122,7 @@ public class Pendiente extends Fragment {
                 });
     }
 
-
     private class pedidosAdapter extends RecyclerView.Adapter<pedidosAdapter.RecViewHolder> {
-
 
         private ArrayList<ModeloPedidos> pedidos;
 
@@ -269,8 +243,6 @@ public class Pendiente extends Fragment {
         avion = view.findViewById(R.id.imgEmpty);
         textEmpty = view.findViewById(R.id.textEmpty);
         recyclerPedidos = view.findViewById(R.id.recyclerPedidos);
-        refreshPedidos = view.findViewById(R.id.refreshPedidos);
-        coordinatorLayout = view.findViewById(R.id.coordinatorPedidos);
     }
 
     //Obtiene la dirección origen de las coordenadas dadas

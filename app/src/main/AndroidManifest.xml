@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.administrador.mandaditostec">
+
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality.
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- To auto-complete the email text field in the login form with the user's emails -->
+
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -24,7 +26,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name="com.Login.Acceder"
             android:label="@string/app_name">
@@ -34,22 +35,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".Cliente.BottomNavigation"/>
-
+        <activity android:name=".Cliente.BottomNavigation" />
         <activity
             android:name="com.exemple.administrador.mandaditostec.mandadero.PedidoMandadero.TodosMandados"
-            android:label="@string/title_activity_bottom_navigation_mandadero">
-
-        </activity>
-
-        <activity android:name="com.exemple.administrador.mandaditostec.mandadero.PedidoMandadero.Bottom_navigation_mandadero"/>
+            android:label="@string/title_activity_bottom_navigation_mandadero"></activity>
+        <activity android:name="com.exemple.administrador.mandaditostec.mandadero.PedidoMandadero.Bottom_navigation_mandadero" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <!--<activity android:name="com.Login.Acceder" />-->
+        <!-- <activity android:name="com.Login.Acceder" /> -->
         <activity
             android:name="com.exemple.administrador.mandaditostec.mandadero.MapaMandadero.MapaMandadero"
             android:label="@string/title_activity_mapa_mandadero" />
@@ -64,7 +60,6 @@
             android:label="@string/title_activity_tab_pedidos"
             android:theme="@style/AppTheme" />
         <activity android:name=".Cliente.Pedido.DetallesPedido" />
-
         <activity
             android:name="com.Login.RegistroCliente"
             android:label="@string/title_activity_registro_cliente"
@@ -80,9 +75,9 @@
         <activity
             android:name=".Cliente.Pedido.Chat"
             android:label="@string/title_activity_chat"
-            android:theme="@style/AppTheme"/>
-
-        <activity android:name="com.exemple.administrador.mandaditostec.mandadero.PedidoMandadero.ChatM"/>
+            android:theme="@style/AppTheme" />
+        <activity android:name="com.exemple.administrador.mandaditostec.mandadero.PedidoMandadero.ChatM" />
+        <activity android:name="com.Info.AppInfo"></activity>
     </application>
 
 </manifest>

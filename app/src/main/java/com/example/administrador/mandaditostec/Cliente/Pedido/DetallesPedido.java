@@ -34,7 +34,8 @@ import java.util.Calendar;
 
 import static com.example.administrador.mandaditostec.Cliente.Pedido.FormDialog.TAG;
 
-public class DetallesPedido extends AppCompatActivity implements View.OnClickListener{
+public class DetallesPedido extends AppCompatActivity implements
+        View.OnClickListener{
 
     public static final String TAG = "Detalles del pedido";
     private Toolbar toolbar;

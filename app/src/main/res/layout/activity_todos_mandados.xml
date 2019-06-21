@@ -3,46 +3,62 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context="com.exemple.administrador.mandaditostec.mandadero.PedidoMandadero.TodosMandados">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="@dimen/appbar_padding_top"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:minHeight="?actionBarSize"
-            android:text="@string/app_name"
-            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_weight="1"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:title="Listas de pedidos">
+
+        </android.support.v7.widget.Toolbar>
 
         <android.support.design.widget.TabLayout
-            android:id="@+id/tabs"
+            android:id="@+id/tabsM"
+            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary" />
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/tabItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tab_text_1" />
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/tabItem2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tab_text_2" />
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/tabItem3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tab_text_5" />
+        </android.support.design.widget.TabLayout>
+
     </android.support.design.widget.AppBarLayout>
 
-
     <android.support.v4.view.ViewPager
-        android:id="@+id/view_pager"
+        android:id="@+id/view_pagerM"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior"/>
 
-
-
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
 </android.support.design.widget.CoordinatorLayout>

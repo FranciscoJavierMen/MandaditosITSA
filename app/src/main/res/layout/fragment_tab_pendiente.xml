@@ -8,21 +8,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Cliente.Pedido.EstadoPedido.Pendiente">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/refreshPedidos"
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:id="@+id/recyclerPedidos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.v7.widget.RecyclerView
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:id="@+id/recyclerPedidos"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </android.support.v7.widget.RecyclerView>
-
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </android.support.v7.widget.RecyclerView>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -30,7 +24,7 @@
 
         <ImageView
             android:visibility="gone"
-            android:id="@+id/imgEmpty"
+            android:id="@+id/imgEmptyMND"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -39,8 +33,8 @@
 
         <TextView
             android:visibility="gone"
-            android:layout_below="@+id/imgEmpty"
-            android:id="@+id/textEmpty"
+            android:layout_below="@+id/imgEmptyMND"
+            android:id="@+id/textEmptyMND"
             android:gravity="center"
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"

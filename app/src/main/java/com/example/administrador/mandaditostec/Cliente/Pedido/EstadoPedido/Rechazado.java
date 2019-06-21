@@ -53,8 +53,6 @@ public class Rechazado extends Fragment {
 
     //Lista y modelo
     private RecyclerView recyclerPedidos;
-    private SwipeRefreshLayout refreshPedidos;
-    private CoordinatorLayout coordinatorLayout;
     private ArrayList<ModeloPedidos> pedidos = new ArrayList<>();
 
     private com.example.administrador.mandaditostec.Cliente.checkNetworkConnection checkNetworkConnection;
@@ -81,27 +79,6 @@ public class Rechazado extends Fragment {
         inicializarComponentes(view);
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
-
-        // Seteamos los colores que se usarán a lo largo de la animación
-        refreshPedidos.setColorSchemeResources(R.color.verde);
-        refreshPedidos.setProgressBackgroundColorSchemeResource(R.color.blanco);
-        refreshPedidos.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                try {
-                    Thread.sleep(1000);
-                    refreshPedidos.setRefreshing(false);
-                    Snackbar snackbar = Snackbar
-                            .make(coordinatorLayout, "Lista de pedidos rechazados actualizada", Snackbar.LENGTH_LONG);
-
-                    snackbar.setActionTextColor(Color.YELLOW);
-                    snackbar.show();
-                    onStart();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mLayoutManager.setReverseLayout(true);
@@ -263,8 +240,6 @@ public class Rechazado extends Fragment {
         avion = view.findViewById(R.id.imgEmpty);
         textEmpty = view.findViewById(R.id.textEmpty);
         recyclerPedidos = view.findViewById(R.id.recyclerPedidos);
-        refreshPedidos = view.findViewById(R.id.refreshPedidos);
-        coordinatorLayout = view.findViewById(R.id.coordinatorPedidos);
     }
 
     //Obtiene la dirección origen de las coordenadas dadas

@@ -42,58 +42,70 @@
 
             </android.support.design.widget.CoordinatorLayout>
 
-                <android.support.v7.widget.CardView
+                <LinearLayout
+                    android:background="@color/azulClaro"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardElevation="6dp"
-                    app:cardCornerRadius="10dp"
-                    app:cardBackgroundColor="#D3F5EB">
+                    android:orientation="vertical">
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_marginTop="20dp">
+                        android:layout_height="match_parent">
 
-                            <android.support.design.widget.FloatingActionButton
-                                android:src="@drawable/ic_person_two"
-                                android:tint="@color/blanco"
-                                app:backgroundTint="@color/azulfondo"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:layout_marginStart="20dp"
-                                android:layout_gravity="center"/>
-
-                            <TextView
-                                android:id="@+id/time"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="15sp"
-                                android:textColor="#1895CA"
-                                android:layout_marginStart="20dp"
-                                android:text="1 minute ago" />
-
-                        </LinearLayout>
-
+                        <ImageView
+                            android:id="@+id/fotoMandadero"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="10sp"
+                            android:layout_marginEnd="10dp"
+                            android:tint="@color/azulObscuro"
+                            android:src="@drawable/ic_alert_outline"/>
 
                         <TextView
-                            android:id="@+id/descripcion"
-                            android:layout_width="wrap_content"
+                            android:id="@+id/edtSearch"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="15sp"
-                            android:textColor="#000"
-                            android:layout_marginStart="70dp"
-                            android:layout_marginEnd="20dp"
-                            android:layout_gravity="start"
-                            android:text="@string/large_text" />
+                            android:layout_toEndOf="@+id/fotoMandadero"
+                            android:layout_centerVertical="true"
+                            android:textSize="14sp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:textStyle="bold"
+                            android:textColor="@android:color/black"
+                            android:background="@null"
+                            android:text="@string/descripcionPedido" />
 
-                    </LinearLayout>
+                    </RelativeLayout>
 
-                </android.support.v7.widget.CardView>
+                    <TextView
+                        android:id="@+id/time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="60dp"
+                        android:layout_marginBottom="15dp"
+                        android:textSize="12sp"
+                        android:textStyle="italic"
+                        android:textColor="@color/azul"
+                        android:text="@string/fecha_pedido"/>
+
+                    <TextView
+                        android:id="@+id/descripcion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="60dp"
+                        android:layout_marginEnd="20dp"
+                        android:textStyle="normal"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/negro"
+                        android:lineSpacingExtra="1dp"
+                        android:textSize="16sp"
+                        android:text="@string/large_text"/>
+
+                </LinearLayout>
+
 
                 <android.support.design.widget.CoordinatorLayout
                     android:layout_width="match_parent"
@@ -110,80 +122,84 @@
 
                 </android.support.design.widget.CoordinatorLayout>
 
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/CardDireccion"
+                <android.support.design.widget.CoordinatorLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginStart="20dp"
-                    app:cardBackgroundColor="@color/azulObscuro">
+                    android:layout_height="wrap_content">
 
                     <LinearLayout
-                        android:baselineAligned="false"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:background="@color/azulObscuro"
                         android:layout_marginStart="15dp"
-                        android:layout_marginEnd="10dp">
+                        android:layout_marginEnd="15dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
 
                         <LinearLayout
-                            android:id="@+id/Lindireccion"
+                            android:id="@+id/linear1"
                             android:layout_weight="1"
+                            android:orientation="vertical"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-
-                            android:orientation="vertical">
+                            android:layout_height="wrap_content">
 
                             <TextView
                                 android:id="@+id/direccionmandado"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Colonia"
-                                android:textColor="@color/blanco"
-                                android:textSize="16sp" />
+                                android:layout_marginTop="25dp"
+                                android:layout_marginBottom="25dp"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginEnd="25dp"
+                                android:text="@string/pedidoEnviadoOk"
+                                android:textColor="@color/blanco"/>
 
-
-
-                            <TextView
-                                android:id="@+id/distancia"
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Distancia "
-                                android:textColor="@color/blanco"
-                                android:textSize="16sp" />
+                                android:orientation="horizontal">
 
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="start"
+                                    android:text="@string/distancia"
+                                    android:textColor="@color/azulClaro"
+                                    android:layout_margin="10dp"/>
 
+                                <TextView
+                                    android:id="@+id/distancia"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="start"
+                                    android:text="@string/distancia"
+                                    android:textStyle="italic"
+                                    android:textColor="@color/azulClaro"
+                                    android:layout_margin="10dp"/>
+                            </LinearLayout>
 
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_weight="6"
+                            android:layout_weight="7"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="0dp">
-
-                            <android.support.design.widget.FloatingActionButton
-                                android:id="@+id/verDireccion"
-                                android:layout_margin="5dp"
-                                android:focusable="true"
-                                android:src="@drawable/ic_arrow_right"
-                                android:tint="@color/azulObscuro"
-                                app:backgroundTint="@color/blanco"
-                                app:layout_anchor="@+id/Lindireccion"
-                                app:layout_anchorGravity="right|center"
-                                app:rippleColor="@color/azul"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp" />
-                        </LinearLayout>
+                            android:layout_height="wrap_content">
 
                         </LinearLayout>
 
+                    </LinearLayout>
 
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/verDireccion"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:focusable="true"
+                        android:src="@drawable/ic_arrow_right"
+                        android:tint="@color/azulObscuro"
+                        app:backgroundTint="@color/blanco"
+                        app:layout_anchor="@+id/linear1"
+                        app:layout_anchorGravity="right|center"
+                        app:rippleColor="@color/azul" />
 
-
-                </android.support.v7.widget.CardView>
+                </android.support.design.widget.CoordinatorLayout>
 
                 <android.support.design.widget.CoordinatorLayout
                     android:layout_width="match_parent"
@@ -200,111 +216,156 @@
 
                 </android.support.design.widget.CoordinatorLayout>
 
-
-                <android.support.v7.widget.CardView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginStart="20dp"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="0dp"
-                    app:cardBackgroundColor="#F1F9FF">
+                    android:orientation="vertical">
 
-                    <android.support.design.widget.CoordinatorLayout
+                    <android.support.v7.widget.CardView
+                        app:cardBackgroundColor="@color/azulClaro"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        app:cardCornerRadius="30dp"
+                        app:cardElevation="0dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <android.support.design.widget.FloatingActionButton
-                            android:src="@drawable/ic_person"
-                            android:tint="@color/blanco"
-                            app:backgroundTint="@color/azulfondo"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp" />
-
                         <LinearLayout
+                            android:baselineAligned="false"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_marginStart="60dp">
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
 
-                            <TextView
-                                android:id="@+id/nombre_cliente"
+                            <FrameLayout
+                                android:layout_weight="4"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textColor="#2699FB"
-                                android:textStyle="bold"
-                                android:textSize="18sp"
-                                android:text="John Doe"
-                                />
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
 
-                            <TextView
-                                android:id="@+id/direccion_cliente"
+                                <ImageView
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:layout_gravity="center"
+                                    android:tint="@color/azulObscuro"
+                                    android:src="@drawable/ic_person"/>
+
+                            </FrameLayout>
+
+                            <LinearLayout
+                                android:layout_weight="1"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textColor="#2699FB"
-                                android:textSize="14sp"
-                                android:text="San Francisco, CA"
-                                />
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/textMandadero"
+                                    android:maxLines="1"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/nombreMandadero"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"/>
+
+                                <TextView
+                                    android:layout_marginTop="3dp"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/azulObscuro"
+                                    android:textStyle="italic"
+                                    android:textSize="12sp"
+                                    android:text="@string/mandadero"/>
+
+                            </LinearLayout>
+
                         </LinearLayout>
-                    </android.support.design.widget.CoordinatorLayout>
-                </android.support.v7.widget.CardView>
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/cardChatM"
-                    app:cardBackgroundColor="@color/azulClaro"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    app:cardCornerRadius="30dp"
-                    app:cardElevation="0dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    </android.support.v7.widget.CardView>
 
-                    <android.support.design.widget.CoordinatorLayout
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/cardChatM"
+                        app:cardBackgroundColor="@color/azulClaro"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        app:cardCornerRadius="30dp"
+                        app:cardElevation="0dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_marginStart="10dp"
-                            android:layout_gravity="center_vertical"
-                            android:src="@drawable/ic_mensaje"/>
-
                         <LinearLayout
+                            android:baselineAligned="false"
+                            android:background="?android:attr/selectableItemBackground"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_marginStart="60dp">
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
 
-                            <TextView
-                                android:id="@+id/numero_cliente"
+                            <FrameLayout
+                                android:layout_weight="4"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textColor="#2699FB"
-                                android:textStyle="bold"
-                                android:textSize="18sp"
-                                android:text="@string/nuevo_chat" />
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
 
-                            <TextView
+                                <ImageView
+                                    android:id="@+id/imgPedido"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:layout_gravity="center"
+                                    android:tint="@color/azulObscuro"
+                                    android:src="@drawable/ic_chat"/>
+
+                            </FrameLayout>
+
+                            <LinearLayout
+                                android:layout_weight="1.5"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textColor="#2699FB"
-                                android:textSize="14sp"
-                                android:text="@string/chat"
-                                />
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:maxLines="1"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/nuevo_chat"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"/>
+
+                                <TextView
+                                    android:layout_marginTop="3dp"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/azulObscuro"
+                                    android:textStyle="italic"
+                                    android:textSize="12sp"
+                                    android:text="@string/chat"/>
+
+                            </LinearLayout>
+
+                            <FrameLayout
+                                android:layout_weight="4.5"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:layout_width="14dp"
+                                    android:layout_height="24dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/flechaderecha"/>
+
+                            </FrameLayout>
+
                         </LinearLayout>
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="right|center_vertical"
 
-                            android:src="@drawable/flechaderecha"
-                            android:tint="#2699FB" />
-                    </android.support.design.widget.CoordinatorLayout>
+                    </android.support.v7.widget.CardView>
 
-                </android.support.v7.widget.CardView>
+                </LinearLayout>
 
                 <android.support.design.widget.CoordinatorLayout
                     android:layout_width="match_parent"

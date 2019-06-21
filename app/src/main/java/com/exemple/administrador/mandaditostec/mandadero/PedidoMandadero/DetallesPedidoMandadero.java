@@ -74,7 +74,7 @@ public class DetallesPedidoMandadero extends DialogFragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
 
-                    //inal String direccionD = dataSnapshot.child("mandadero").getValue().toString();
+                    //final String direccionD = dataSnapshot.child("mandadero").getValue().toString();
                     final String pedido = dataSnapshot.child("pedido").getValue().toString();
                     final String fecha = dataSnapshot.child("hora").getValue().toString();
                     latorig = dataSnapshot.child("latitudOrigen").getValue().toString();
