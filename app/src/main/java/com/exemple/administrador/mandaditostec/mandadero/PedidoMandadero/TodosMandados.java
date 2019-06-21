@@ -7,7 +7,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.Info.AppInfo;
+import com.Info.Desarrolladores;
+import com.Info.Terminos;
 import com.Login.Acceder;
 import android.support.v4.app.FragmentManager;
 import com.example.administrador.mandaditostec.R;
@@ -27,6 +34,9 @@ public class TodosMandados extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_todos_mandados);
+
+        Toolbar toolbar = findViewById(R.id.toolbarListaMandados);
+        setSupportActionBar(toolbar);
 
         //Inicializa instancia de autentificación de Firebase
         mAuth = FirebaseAuth.getInstance();
@@ -60,6 +70,34 @@ public class TodosMandados extends AppCompatActivity {
         startActivity(start);
         finish();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_todos_pedidos, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        switch (id){
+            case R.id.action_about:
+                startActivity(new Intent(TodosMandados.this, AppInfo.class));
+                break;
+            case R.id.action_devs:
+                startActivity(new Intent(TodosMandados.this, Desarrolladores.class));
+                break;
+            case R.id.action_terms:
+                startActivity(new Intent(TodosMandados.this, Terminos.class));
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 

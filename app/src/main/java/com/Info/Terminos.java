@@ -7,16 +7,17 @@ import android.view.View;
 
 import com.example.administrador.mandaditostec.R;
 
-public class AppInfo extends AppCompatActivity {
+public class Terminos extends AppCompatActivity {
 
-    public static final String TAG = "Información de la app";
+    public static final String TAG = "Términos y condiciones";
     private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_app_info);
-        toolbar = findViewById(R.id.toolbarAppInfo);
+        setContentView(R.layout.activity_terminos);
+
+        toolbar = findViewById(R.id.toolbarTerminos);
         toolbar.setTitle(TAG);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         setSupportActionBar(toolbar);

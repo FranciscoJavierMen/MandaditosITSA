@@ -38,9 +38,7 @@
                 android:layout_margin="15dp"
                 app:cardElevation="6dp"
                 app:cardCornerRadius="8dp"
-                android:id="@+id/cardPedidos"
-                app:cardBackgroundColor="@color/azulClaro"
-
+                app:cardBackgroundColor="@color/blanco"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -51,11 +49,11 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_marginTop="10dp"
-                        android:layout_gravity="center"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:src="@drawable/pedidos" />
+                        android:contentDescription="@string/pedido_pendiente"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/montana_noche" />
 
                     <TextView
                         style="@style/textoTituloPedido"
@@ -70,10 +68,19 @@
                     <TextView
                         android:layout_margin="10dp"
                         android:textColor="@android:color/black"
-                        android:textSize="16sp"
+                        android:textSize="18sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/acceder_lista_pedidos"/>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/btnCardPedidos"
+                            style="@style/botonCards" />
+                    </FrameLayout>
 
                 </LinearLayout>
 
@@ -83,8 +90,7 @@
                 android:layout_margin="15dp"
                 app:cardElevation="6dp"
                 app:cardCornerRadius="8dp"
-                android:id="@+id/card2"
-                app:cardBackgroundColor="@color/azulObscuro"
+                app:cardBackgroundColor="@color/blanco"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -95,32 +101,146 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_marginTop="25dp"
-                        android:layout_gravity="center"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:src="@drawable/conversacion" />
+                        android:contentDescription="@string/pedido_pendiente"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/commetas" />
 
                     <TextView
                         style="@style/textoTituloPedido"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:textColor="@color/azulClaro"
-                        android:text="¿Que puedes hacer con esta app?"/>
+                        android:textColor="@color/azulObscuro"
+                        android:text="¿Como realizar un pedido?"/>
 
                     <TextView
                         android:layout_margin="10dp"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/descubre"/>
+                        android:text="@string/tuto"/>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/btnCardTuto"
+                            style="@style/botonCards" />
+                    </FrameLayout>
 
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
 
+            <android.support.v7.widget.CardView
+                android:layout_margin="15dp"
+                app:cardElevation="6dp"
+                app:cardCornerRadius="8dp"
+                app:cardBackgroundColor="@color/blanco"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:contentDescription="@string/pedido_pendiente"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/iceberg" />
+
+                    <TextView
+                        style="@style/textoTituloPedido"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textColor="@color/azulObscuro"
+                        android:text="Conoce más sobre la app"/>
+
+                    <TextView
+                        android:layout_margin="10dp"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ver_mas"/>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/btnCardAcerca"
+                            style="@style/botonCards" />
+                    </FrameLayout>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_margin="15dp"
+                app:cardElevation="6dp"
+                app:cardCornerRadius="8dp"
+                app:cardBackgroundColor="@color/blanco"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:contentDescription="@string/pedido_pendiente"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/blue" />
+
+                    <TextView
+                        style="@style/textoTituloPedido"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textColor="@color/azulObscuro"
+                        android:text="Términos y condiciones"/>
+
+                    <TextView
+                        android:layout_margin="10dp"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/terminos"/>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/btnCardTerminos"
+                            style="@style/botonCards" />
+                    </FrameLayout>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

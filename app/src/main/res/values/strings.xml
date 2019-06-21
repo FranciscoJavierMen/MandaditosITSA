@@ -125,4 +125,13 @@
     <string name="escrie_un_mensaje">Escribe un mensaje</string>
     <string name="mensaje_prueba">Este es un mensaje de prueba</string>
     <string name="distancia">Distancia</string>
+    <string name="acerca_de">Acerca de</string>
+    <string name="desarrolladores">Desarrolladores</string>
+    <string name="t_rminos_y_condiciones">Términos y condiciones</string>
+    <string name="tuto">Accede a una pequeña guia que te enseña los pasos para crear un pedido y llevar el seguimiento de los mismos.</string>
+    <string name="ver_mas">
+        Conoce más sobre el equipo de desarrollo, cono ce a cada uno de sus integrantes,
+        asi como la misión y visión de la aplicación y mucho más.
+    </string>
+    <string name="terminos">Echa un vistazo a los términos y condiciones que rijen el funcionamiento de la app. Mantente informado sobre las politicas de uso.</string>
 </resources>

@@ -38,7 +38,7 @@
         <activity android:name=".Cliente.BottomNavigation" />
         <activity
             android:name="com.exemple.administrador.mandaditostec.mandadero.PedidoMandadero.TodosMandados"
-            android:label="@string/title_activity_bottom_navigation_mandadero"></activity>
+            android:label="@string/title_activity_bottom_navigation_mandadero" />
         <activity android:name="com.exemple.administrador.mandaditostec.mandadero.PedidoMandadero.Bottom_navigation_mandadero" />
 
         <meta-data
@@ -77,7 +77,10 @@
             android:label="@string/title_activity_chat"
             android:theme="@style/AppTheme" />
         <activity android:name="com.exemple.administrador.mandaditostec.mandadero.PedidoMandadero.ChatM" />
-        <activity android:name="com.Info.AppInfo"></activity>
+        <activity android:name="com.Info.AppInfo" />
+        <activity android:name="com.Info.Desarrolladores" />
+        <activity android:name="com.Info.Terminos" />
+        <activity android:name="com.Info.Tutorial" />
     </application>
 
 </manifest>

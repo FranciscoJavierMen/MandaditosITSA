@@ -17,6 +17,9 @@ import android.view.View;
 import android.widget.Toast;
 
 
+import com.Info.AppInfo;
+import com.Info.Desarrolladores;
+import com.Info.Terminos;
 import com.Login.Acceder;
 import com.example.administrador.mandaditostec.Cliente.BottomNavigation;
 import com.example.administrador.mandaditostec.Cliente.Pedido.FormDialog;
@@ -91,13 +94,6 @@ public class TabPedidos extends AppCompatActivity {
         super.onStart();
     }
 
-    //Método para volver a activitu de logeo y registro
-    private void backToWelcome() {
-        Intent start = new Intent(TabPedidos.this, Acceder.class);
-        startActivity(start);
-        finish();
-    }
-
     //Abre el dialogo con el formulario de pedidos
     private void abrirDialogo(){
         FormDialog.display(getSupportFragmentManager());
@@ -115,15 +111,16 @@ public class TabPedidos extends AppCompatActivity {
 
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            progressDialog.setTitle("Cerrar sesión");
-            progressDialog.setMessage("Saliendo de tu cuenta...");
-            progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.show();
-            FirebaseAuth.getInstance().signOut();
-            backToWelcome();
-            progressDialog.dismiss();
-            return true;
+        switch (id){
+            case R.id.action_about:
+                startActivity(new Intent(TabPedidos.this, AppInfo.class));
+                break;
+            case R.id.action_devs:
+                startActivity(new Intent(TabPedidos.this, Desarrolladores.class));
+                break;
+            case R.id.action_terms:
+                startActivity(new Intent(TabPedidos.this, Terminos.class));
+                break;
         }
 
         return super.onOptionsItemSelected(item);

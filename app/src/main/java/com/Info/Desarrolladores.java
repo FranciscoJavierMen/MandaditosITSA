@@ -7,16 +7,16 @@ import android.view.View;
 
 import com.example.administrador.mandaditostec.R;
 
-public class AppInfo extends AppCompatActivity {
+public class Desarrolladores extends AppCompatActivity {
 
-    public static final String TAG = "Información de la app";
+    public static final String TAG = "Sobre los desarrolladores";
     private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_app_info);
-        toolbar = findViewById(R.id.toolbarAppInfo);
+        setContentView(R.layout.activity_desarrolladores);
+        toolbar = findViewById(R.id.toolbarDesarrolladores);
         toolbar.setTitle(TAG);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         setSupportActionBar(toolbar);

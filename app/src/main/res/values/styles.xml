@@ -82,6 +82,24 @@
         <item name="android:background">@drawable/boton_select_mandadero</item>
     </style>
 
+    <!--Estilo para el botón de los mandaderos-->
+    <style name="botonCards">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:paddingStart">40sp</item>
+        <item name="android:paddingEnd">40sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">@drawable/boton_select_mandadero</item>
+        <item name="android:text">Ver más</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+
     <!--Estilo para las los textos en forma de etiquetas-->
     <style name="etiqueta">
         <item name="android:layout_width">wrap_content</item>
