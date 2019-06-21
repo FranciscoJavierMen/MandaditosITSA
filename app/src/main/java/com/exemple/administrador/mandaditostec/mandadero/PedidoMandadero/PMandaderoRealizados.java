@@ -195,7 +195,7 @@ public class PMandaderoRealizados extends Fragment {
             final String lngorigen = modelo.getLongitudOrigen();
             final String pedidoID = modelo.getId();
             final String idMandadero = modelo.getIdMandadero();
-
+            final String estado = modelo.getEstado();
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -220,6 +220,7 @@ public class PMandaderoRealizados extends Fragment {
                     DetallesPedidoMandadero.key = pedidoID;
                     DetallesPedidoMandadero.idMandadero = idMandadero;
                     DetallesPedidoMandadero.idMandadero = idMandadero;
+                    DetallesPedidoMandadero.estado = estado;
                     DetallesPedidoMandadero.display(getFragmentManager());
                 }
             });

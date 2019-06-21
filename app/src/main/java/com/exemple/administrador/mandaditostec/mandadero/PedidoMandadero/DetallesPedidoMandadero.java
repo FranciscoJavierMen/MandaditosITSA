@@ -1,18 +1,22 @@
 package com.exemple.administrador.mandaditostec.mandadero.PedidoMandadero;
 
 import android.app.Dialog;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.content.Intent;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,13 +41,16 @@ public class DetallesPedidoMandadero extends DialogFragment {
     private CardView cardChat;
     public static String idMandadero;
     public static String nombreMandadero;
+    public static String estado;
+    private FloatingActionButton fabEstado;
+    private AppCompatButton btnEstado, btnEstado2;
+    private CoordinatorLayout coordinatorLayout;
+    private LinearLayout linearLayout;
 
     private FloatingActionButton irdireccion,aceptar,cancerlar;
     private DatabaseReference databaseReference;
 
     private TextView detallespedido,hora,tvdistancia,tvdireccion;
-
-
 
     public static DetallesPedidoMandadero display(FragmentManager fragmentManager) {
         DetallesPedidoMandadero detallesPedido = new DetallesPedidoMandadero();
@@ -54,7 +61,6 @@ public class DetallesPedidoMandadero extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(FormDialog.STYLE_NORMAL,R.style.AppTheme_FullScreenDialog);
-
     }
 
     @Override
@@ -109,6 +115,11 @@ public class DetallesPedidoMandadero extends DialogFragment {
         cancerlar = view.findViewById(R.id.cancelarpedido);
         tvdistancia = view.findViewById(R.id.distancia);
         tvdireccion = view.findViewById(R.id.direccionmandado);
+        fabEstado = view.findViewById(R.id.fabEstado);
+        btnEstado = view.findViewById(R.id.btnEstadoPedido);
+        btnEstado2 = view.findViewById(R.id.btnEstadoPedido2);
+        coordinatorLayout = view.findViewById(R.id.coordinatorFab);
+        linearLayout = view.findViewById(R.id.linearFab);
 
         detallespedido = view.findViewById(R.id.descripcion);
         cardChat = view.findViewById(R.id.cardChatM);
@@ -123,6 +134,8 @@ public class DetallesPedidoMandadero extends DialogFragment {
                 startActivity(chat);
             }
         });
+
+        getStatus();
 
         return view;
     }
@@ -167,9 +180,47 @@ public class DetallesPedidoMandadero extends DialogFragment {
             }
         });
         toolbar.setTitle("Detalles del pedido");
+        }
 
-        //LocationManager mlocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+    //Método para verificar el esatdo del pedido
+    private void getStatus(){
+        switch (estado){
+            case "pendiente":
+                fabEstado.setImageResource(R.drawable.ic_reloj);
+                fabEstado.setImageResource(R.drawable.ic_reloj);
+                btnEstado.setText("Pedido en espera");
+                fabEstado.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.azul)));
+                cardChat.setEnabled(true);
+                linearLayout.setVisibility(View.VISIBLE);
+                coordinatorLayout.setVisibility(View.GONE);
+                break;
+            case "aceptado":
+                fabEstado.setImageResource(R.drawable.ic_done);
+                fabEstado.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.azul)));
+                btnEstado.setText("Pedido aceptado");
+                btnEstado.setEnabled(true);
+                btnEstado.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_boton_recibido));
+                cardChat.setEnabled(true);
+                linearLayout.setVisibility(View.GONE);
+                coordinatorLayout.setVisibility(View.VISIBLE);
+                break;
+            case "realizado":
+                cardChat.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(getContext(), "El pedido ya terminó, ya no puedes enviar mensajes", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                fabEstado.setImageResource(R.drawable.ic_gift);
+                fabEstado.setImageResource(R.drawable.ic_gift);
+                fabEstado.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.verde)));
+                btnEstado.setText("Pedido realizado");
+                btnEstado.setEnabled(false);
+                btnEstado.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_boton_recibido));
+                linearLayout.setVisibility(View.GONE);
+                coordinatorLayout.setVisibility(View.VISIBLE);
+                btnEstado2.setText("El pedido ya ha finalizado");
+                break;
+        }
     }
-
-
 }

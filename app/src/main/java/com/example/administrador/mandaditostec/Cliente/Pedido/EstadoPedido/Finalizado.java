@@ -99,7 +99,7 @@ public class Finalizado extends Fragment {
                             DataSnapshot item = items.next();
                             ModeloPedidos pedido = item.getValue(ModeloPedidos.class);
 
-                            if (pedido.getIdCliente().equals(idCliente) && pedido.getEstado().equals("finalizado")){
+                            if (pedido.getIdCliente().equals(idCliente) && pedido.getEstado().equals("realizado")){
                                 pedidos.add(pedido);
                             }
 
