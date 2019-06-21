@@ -121,11 +121,11 @@ public class PMandaderoPendientes extends Fragment {
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        RecyclerView.LayoutManager nLayoutManager = new LinearLayoutManager(getActivity());
-        ((LinearLayoutManager) nLayoutManager).setReverseLayout(true);
-        ((LinearLayoutManager) nLayoutManager).setStackFromEnd(false);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setStackFromEnd(true);
 
-        recyclerPendientes.setLayoutManager(nLayoutManager);
+        recyclerPendientes.setLayoutManager(mLayoutManager);
 
         return view;
     }
@@ -200,9 +200,6 @@ public class PMandaderoPendientes extends Fragment {
                     lngorig = lngorigen + "";
                     latdest = latdestino + "";
                     lngdest = lngdestino + "";
-
-
-                    Toast.makeText(getContext(), ""+idMandadero, Toast.LENGTH_SHORT).show();
 
                     double latd=Double.parseDouble(modelo.getLatitudDestino());
                     double lngd=Double.parseDouble(modelo.getLongitudDestino());
@@ -285,8 +282,8 @@ public class PMandaderoPendientes extends Fragment {
 
     private void inicializarComponentes(View view) {
         recyclerPendientes = view.findViewById(R.id.recyclerPedidosMandaderosPendientes);
-        avion = view.findViewById(R.id.imgEmptyMND);
-        textEmpty = view.findViewById(R.id.textEmptyMND);
+        avion = view.findViewById(R.id.imgEmpty);
+        textEmpty = view.findViewById(R.id.textEmpty);
     }
 
     @Override

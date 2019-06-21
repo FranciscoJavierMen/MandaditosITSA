@@ -142,7 +142,7 @@ public class DetallesPedido extends AppCompatActivity implements
                 btnConfirmar.setEnabled(true);
                 btnConfirmar.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_boton_recibido));
                 break;
-            case "finalizado":
+            case "realizado":
                 txtEstado.setText("El pedido ya ha te ha sido entregado");
                 cardChat.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -191,7 +191,7 @@ public class DetallesPedido extends AppCompatActivity implements
         btnAceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                databaseReference.child(id).child("estado").setValue("finalizado");
+                databaseReference.child(id).child("estado").setValue("realizado");
                 databaseReference.child(id).child("hora").setValue(getdateTime());
                 Toast.makeText(DetallesPedido.this, "Se ha confirmado la recepción del pedido", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();

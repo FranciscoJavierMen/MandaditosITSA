@@ -1,18 +1,45 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/fragmentpedidos"
     tools:context="com.exemple.administrador.mandaditostec.mandadero.PedidoMandadero.PMandaderoRealizados">
-    <android.support.v4.widget.NestedScrollView
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerPedidosMandaderosRealizados"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v7.widget.RecyclerView>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- TODO: Update blank fragment layout -->
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerPedidosMandaderosRealizados"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </android.support.v7.widget.RecyclerView>
-    </android.support.v4.widget.NestedScrollView>
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/imgEmpty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/paper"/>
 
-</FrameLayout>
+        <TextView
+            android:visibility="gone"
+            android:layout_below="@+id/imgEmpty"
+            android:id="@+id/textEmpty"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="italic"
+            android:textColor="@android:color/darker_gray"
+            android:text="@string/sin_pedidos"/>
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

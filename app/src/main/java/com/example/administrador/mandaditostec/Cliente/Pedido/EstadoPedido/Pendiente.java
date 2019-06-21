@@ -52,6 +52,7 @@ public class Pendiente extends Fragment {
     private ImageView avion;
     private TextView textEmpty;
 
+    private FirebaseAuth mAuth;
     private String idCliente;
 
     //Lista y modelo
@@ -64,8 +65,8 @@ public class Pendiente extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         checkNetworkConnection = new checkNetworkConnection(getContext());
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser current_user = mAuth.getCurrentUser();
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
         if (current_user != null) {
             idCliente = current_user.getUid();
         }
@@ -122,7 +123,9 @@ public class Pendiente extends Fragment {
                 });
     }
 
+
     private class pedidosAdapter extends RecyclerView.Adapter<pedidosAdapter.RecViewHolder> {
+
 
         private ArrayList<ModeloPedidos> pedidos;
 

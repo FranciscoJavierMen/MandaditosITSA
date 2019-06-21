@@ -26,14 +26,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.administrador.mandaditostec.Cliente.Pedido.DetallesPedido;
 import com.example.administrador.mandaditostec.Cliente.Pedido.FormDialog;
+import com.example.administrador.mandaditostec.Cliente.checkNetworkConnection;
 import com.example.administrador.mandaditostec.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,6 +46,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -70,22 +75,19 @@ public class PMandaderoAceptados extends Fragment {
 
     //Lista y modelo
     private RecyclerView recyclerAceptados;
-    private AdaptadorPedidos adaptadorPedidos;
     private ArrayList<PedidosMandadero> listaPedidos = new ArrayList<>();
-    private SwipeRefreshLayout refreshPedidos;
-    private CoordinatorLayout coordinatorLayout;
+    private com.example.administrador.mandaditostec.Cliente.checkNetworkConnection checkNetworkConnection;
 
     //Firebase
-    private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference  referenceAceptados;
+    private DatabaseReference databaseReference;
+    private String idMandadero;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private ImageView avion;
+    private TextView textEmpty;
+
 
     private OnFragmentInteractionListener mListener;
 
-    // TODO: Rename and change types and number of parameters
     public static PMandaderoPendientes newInstance(String param1, String param2) {
         PMandaderoPendientes fragment = new PMandaderoPendientes();
         Bundle args = new Bundle();
@@ -98,9 +100,24 @@ public class PMandaderoAceptados extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+        checkNetworkConnection = new checkNetworkConnection(getContext());
+        try{
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            FirebaseUser current_user = mAuth.getCurrentUser();
+            if (current_user != null) {
+                idMandadero = current_user.getUid();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        try{
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            FirebaseUser current_user = mAuth.getCurrentUser();
+            if (current_user != null) {
+                idMandadero = current_user.getUid();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
         }
 
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -117,79 +134,41 @@ public class PMandaderoAceptados extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_pmandadero_aceptados, container, false);
-        //inicializarFirebase();
         inicializarComponentes(view);
 
-        referenceAceptados = FirebaseDatabase.getInstance().getReference().child("Pedido");
+        databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        RecyclerView.LayoutManager nLayoutManager = new LinearLayoutManager(getActivity());
-        ((LinearLayoutManager) nLayoutManager).setReverseLayout(true);
-        ((LinearLayoutManager) nLayoutManager).setStackFromEnd(false);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setStackFromEnd(true);
 
-        recyclerAceptados.setLayoutManager(nLayoutManager);
+        recyclerAceptados.setLayoutManager(mLayoutManager);
 
         return view;
     }
 
-    public void Aceptados() {
-        FirebaseRecyclerOptions<PedidosMandadero> opciones
-                = new FirebaseRecyclerOptions.Builder<PedidosMandadero>()
-                .setQuery(referenceAceptados.orderByChild("estado").equalTo("aceptado"), PedidosMandadero.class)
-                .build();
-
-        FirebaseRecyclerAdapter<PedidosMandadero, PMandaderoAceptados.PedidosMandaderoAceptadoViewHolder> adapter
-                = new FirebaseRecyclerAdapter<PedidosMandadero, PedidosMandaderoAceptadoViewHolder>(opciones) {
-            @Override
-            protected void onBindViewHolder(final PedidosMandaderoAceptadoViewHolder holder, int position, PedidosMandadero model) {
-                final String pedidoID = getRef(position).getKey();
-
-                referenceAceptados.child(pedidoID).addValueEventListener(new ValueEventListener() {
+    private void isCurrenUser(){
+        databaseReference.child("Pedido")
+                .addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Iterator<DataSnapshot> items = dataSnapshot.getChildren().iterator();
+                        checkData(dataSnapshot);
+                        listaPedidos.clear();
+                        while (items.hasNext()) {
+                            DataSnapshot item = items.next();
+                            PedidosMandadero pedido = item.getValue(PedidosMandadero.class);
 
-                            //inal String direccionD = dataSnapshot.child("mandadero").getValue().toString();
-                            final String pedido = dataSnapshot.child("pedido").getValue().toString();
-                            final String fecha = dataSnapshot.child("hora").getValue().toString();
-                            final String latorigen = dataSnapshot.child("latitudOrigen").getValue().toString();
-                            final String latdestino = dataSnapshot.child("latitudDestino").getValue().toString();
-                            final String lngdestino = dataSnapshot.child("longitudDestino").getValue().toString();
-                            final String lngorigen = dataSnapshot.child("longitudOrigen").getValue().toString();
+                            if (pedido.getIdMandadero().equals(idMandadero) && pedido.getEstado().equals("aceptado")) {
+                                listaPedidos.add(pedido);
+                            }
 
-                            holder.tvpedido.setText(pedido);
-                            holder.tvhora.setText(fecha);
-
-                            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    latorig = latorigen + "";
-                                    lngorig = lngorigen + "";
-                                    latdest = latdestino + "";
-                                    lngdest = lngdestino + "";
-
-                                    final String idMandadero = dataSnapshot.child("idCliente").getValue().toString();
-                                    Toast.makeText(getContext(), ""+idMandadero, Toast.LENGTH_SHORT).show();
-
-                                    double latd=Double.parseDouble(latdestino);
-                                    double lngd=Double.parseDouble(lngdestino);
-
-                                    Location locationA = new Location("Destino");
-
-                                    locationA.setLatitude(latd);
-                                    locationA.setLongitude(lngd);
-
-                                    obtenerDireccionRapido(locationA);
-                                    DetallesPedidoMandadero.distancia = distancia;
-                                    DetallesPedidoMandadero.direccion = direccion;
-                                    DetallesPedidoMandadero.key = pedidoID;
-                                    DetallesPedidoMandadero.idMandadero = idMandadero;
-                                    DetallesPedidoMandadero.idMandadero = idMandadero;
-                                    DetallesPedidoMandadero.display(getFragmentManager());
-                                }
-                            });
-                        } else {
-                            Toast.makeText(getActivity().getApplicationContext(), "El nodo no existe", Toast.LENGTH_SHORT).show();
                         }
+                        checkList(listaPedidos);
+                        recyclerAceptados.setAdapter(new pedidosAdapter(listaPedidos));
+                        recyclerAceptados.getAdapter().notifyDataSetChanged();
+                        databaseReference.child("Pedido").removeEventListener(this);
+
                     }
 
                     @Override
@@ -197,59 +176,137 @@ public class PMandaderoAceptados extends Fragment {
 
                     }
                 });
-            }
-
-
-            @Override
-            public PMandaderoAceptados.PedidosMandaderoAceptadoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.row_pedido, parent, false);
-                return new PMandaderoAceptados.PedidosMandaderoAceptadoViewHolder(view);
-            }
-        };
-        recyclerAceptados.setAdapter(adapter);
-        adapter.startListening();
     }
 
+    private class pedidosAdapter extends RecyclerView.Adapter<pedidosAdapter.RecViewHolder> {
+
+        private ArrayList<PedidosMandadero> listaPedidos;
+
+        public pedidosAdapter(ArrayList<PedidosMandadero> listaPedidos) {
+            this.listaPedidos = listaPedidos;
+        }
+
+        @Override
+        public pedidosAdapter.RecViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(getContext()).inflate(R.layout.item_pedido, null);
+            return new RecViewHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(RecViewHolder holder, int position) {
+            final PedidosMandadero modelo = listaPedidos.get(position);
+            holder.txtDireccionDestino.setText(modelo.getMandadero());
+            holder.txtPedido.setText(modelo.getPedido());
+            holder.txtHora.setText(modelo.getHora());
+            holder.image.setImageResource(R.drawable.img_aceptado);
+
+
+            final String latorigen = modelo.getLatitudOrigen();
+            final String latdestino = modelo.getLatitudDestino();
+            final String lngdestino = modelo.getLongitudDestino();
+            final String lngorigen = modelo.getLongitudOrigen();
+            final String pedidoID = modelo.getId();
+            final String idMandadero = modelo.getIdMandadero();
+
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    latorig = latorigen + "";
+                    lngorig = lngorigen + "";
+                    latdest = latdestino + "";
+                    lngdest = lngdestino + "";
+
+                    double latd=Double.parseDouble(modelo.getLatitudDestino());
+                    double lngd=Double.parseDouble(modelo.getLongitudDestino());
+
+                    Location locationA = new Location("Destino");
+
+                    locationA.setLatitude(latd);
+                    locationA.setLongitude(lngd);
+
+                    obtenerDireccionRapido(locationA);
+                    DetallesPedidoMandadero.distancia = distancia;
+                    DetallesPedidoMandadero.direccion = direccion;
+                    DetallesPedidoMandadero.key = pedidoID;
+                    DetallesPedidoMandadero.idMandadero = idMandadero;
+                    DetallesPedidoMandadero.idMandadero = idMandadero;
+                    DetallesPedidoMandadero.display(getFragmentManager());
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return listaPedidos.size();
+        }
+
+        public class RecViewHolder extends RecyclerView.ViewHolder {
+
+            private TextView txtDireccionDestino, txtPedido, txtHora;
+            private ImageView image;
+
+            public RecViewHolder(View itemView) {
+                super(itemView);
+
+                txtDireccionDestino = itemView.findViewById(R.id.txtDireccionPedido);
+                txtPedido = itemView.findViewById(R.id.txtDescripcionPedido);
+                txtHora = itemView.findViewById(R.id.txtHoraPedido);
+                image = itemView.findViewById(R.id.imgPedido);
+            }
+        }
+    }
 
     @Override
     public void onStart() {
         super.onStart();
-
-        Aceptados();
-
+        if (!checkNetworkConnection.isConnected()){
+            recyclerAceptados.setVisibility(View.GONE);
+            avion.setImageResource(R.drawable.no_wifi);
+            avion.setVisibility(View.VISIBLE);
+            textEmpty.setText("No estas conectado a internet");
+            textEmpty.setVisibility(View.VISIBLE);
+        }
+        else{
+            isCurrenUser();
+            recyclerAceptados.setVisibility(View.VISIBLE);
+            avion.setVisibility(View.GONE);
+            textEmpty.setVisibility(View.GONE);
+        }
     }
 
-    private static class PedidosMandaderoAceptadoViewHolder extends RecyclerView.ViewHolder {
+    private void checkData(DataSnapshot dataSnapshot){
+        if (dataSnapshot.getChildrenCount() < 1){
+            recyclerAceptados.setVisibility(View.GONE);
+            avion.setVisibility(View.VISIBLE);
+            textEmpty.setVisibility(View.VISIBLE);
+        }
+        else{
+            recyclerAceptados.setVisibility(View.VISIBLE);
+            avion.setVisibility(View.GONE);
+            textEmpty.setVisibility(View.GONE);
+        }
+    }
 
-        private TextView tvpedido, tvhora;
-
-        public PedidosMandaderoAceptadoViewHolder(View itemView) {
-            super(itemView);
-
-            tvpedido = itemView.findViewById(R.id.tvdescripcionpedido);
-            tvhora = itemView.findViewById(R.id.tvhorapedido);
+    private void checkList(ArrayList arrayList){
+        if (arrayList.size() < 1){
+            recyclerAceptados.setVisibility(View.GONE);
+            avion.setVisibility(View.VISIBLE);
+            textEmpty.setVisibility(View.VISIBLE);
         }
     }
 
     private void inicializarComponentes(View view) {
-
         recyclerAceptados = view.findViewById(R.id.recyclerPedidosMandaderosAceptados);
-        //refreshPedidos = view.findViewById(R.id.refreshPedidos);
-        //fabPedido = view.findViewById(R.id.fabPedido);
-        //coordinatorLayout = view.findViewById(R.id.fragmentpedidos);
-
-
-
-
-
+        avion = view.findViewById(R.id.imgEmpty);
+        textEmpty = view.findViewById(R.id.textEmpty);
     }
 
     private void abrirDialogo() {
         FormDialog.display(getFragmentManager());
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
